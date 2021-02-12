@@ -1,6 +1,7 @@
 FROM node:14-alpine as base
 LABEL org.opencontainers.image.source=https://github.com/ChrisKinsman/github-action-dashboard
 WORKDIR /github-action-dashboard
+ENV NODE_ENV production
 
 # ---- Dependencies
 FROM base as dependencies
@@ -28,5 +29,4 @@ FROM base as release
 COPY --from=build /github-action-dashboard/client/dist/ ./client/dist/
 COPY --from=build /github-action-dashboard/configure.js /github-action-dashboard/github.js /github-action-dashboard/index.js /github-action-dashboard/routes.js /github-action-dashboard/getinstallationid.js  ./
 COPY --from=npm /github-action-dashboard/node_modules ./node_modules
-RUN NODE_ENV=production
-EXPOSE 80
+
