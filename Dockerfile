@@ -26,7 +26,7 @@ RUN cd /github-action-dashboard/ && \
 # production stage & clean up
 FROM base as release
 COPY --from=build /github-action-dashboard/client/dist/ ./client/dist/
-COPY --from=build /github-action-dashboard/configure.js /github-action-dashboard/github.js /github-action-dashboard/index.js /github-action-dashboard/routes.js  ./
+COPY --from=build /github-action-dashboard/configure.js /github-action-dashboard/github.js /github-action-dashboard/index.js /github-action-dashboard/routes.js /github-action-dashboard/getinstallationid.js  ./
 COPY --from=npm /github-action-dashboard/node_modules ./node_modules
 RUN NODE_ENV=production
 EXPOSE 80
