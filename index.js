@@ -5,7 +5,7 @@ try {
     const configureAPI = require('./configure');
     const app = express();
 
-    const { PORT = 80 } = process.env;
+    const { PORT = 8080 } = process.env;
 
     // API
     configureAPI(app);
