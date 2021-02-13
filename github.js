@@ -14,7 +14,7 @@ const _org = process.env.GITHUB_ORG;
 const _user = process.env.GITHUB_USERNAME;
 const _appId = process.env.GITHUB_APPID;
 // Handles newlines \n in private key
-const _privateKey = JSON.parse(`"${process.env.GITHUB_APP_PRIVATEKEY}"`);
+const _privateKey = Buffer.from(process.env.GITHUB_APP_PRIVATEKEY, "base64").toString("utf-8");
 const _clientId = process.env.GITHUB_APP_CLIENTID;
 const _clientSecret = process.env.GITHUB_APP_CLIENTSECRET;
 const _installationId = process.env.GITHUB_APP_INSTALLATIONID;

@@ -53,7 +53,7 @@ The dashboard has all of it's parameters passed via environment variables.
 
 * GITHUB_USERNAME or GITHUB_ORG - Only one valid is allowed.  If both are specified GITHUB_ORG takes precedence and the GITHUB_USERNAME is ignored.
 * GITHUB_APPID - The AppId from the GitHub App general settings page.
-* GITHUB_APP_PRIVATEKEY - The private key from the GitHub App general settings page. All line feeds must be converted to \n characters so the environment variable and the entire setting should be surrounded with single quotes.
+* GITHUB_APP_PRIVATEKEY - The base64 encoded private key from the GitHub App general settings page. 
 * GITHUB_APP_CLIENTID - The client id from the GitHub App general settings page.
 * GITHUB_APP_CLIENTSECRET - The client secret from the GitHub App general settings page.
 * GITHUB_APP_INSTALLATIONID - Installation id that can be retrieved using steps in the next section.
@@ -68,7 +68,7 @@ For some reason GitHub doesn't expose the installation id anywhere in the UI. I 
 Requires docker installed locally.
 
 ~~~bash
-docker run --rm -t --env GITHUB_USERNAME=XXXXXXX --env GITHUB_APPID=XXXXXX --env GITHUB_APP_PRIVATEKEY='-----BEGIN RSA PRIVATE KEY-----\nXXXXXX\nXXXXXXX\nXXXXXXX\n-----END RSA PRIVATE KEY-----' --env GITHUB_APP_CLIENTID=XXX.XXXXXXXXXXXXXXXX --env GITHUB_APP_CLIENTSECRET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ghcr.io/chriskinsman/github-action-dashboard:edge node getinstallationid.js
+docker run --rm -t --env GITHUB_USERNAME=XXXXXXX --env GITHUB_APPID=XXXXXX --env GITHUB_APP_PRIVATEKEY=XXXXXXXXXXXXXXXXXXX --env GITHUB_APP_CLIENTID=XXX.XXXXXXXXXXXXXXXX --env GITHUB_APP_CLIENTSECRET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ghcr.io/chriskinsman/github-action-dashboard:edge node getinstallationid.js
 ~~~
 
 #### Option 2
@@ -77,7 +77,7 @@ Requires nodejs installed locally.
 
 ~~~bash
 npm ci
-GITHUB_USERNAME=XXXXXXX GITHUB_APPID=XXXXXX GITHUB_APP_PRIVATEKEY='-----BEGIN RSA PRIVATE KEY-----\nXXXXXX\nXXXXXXX\nXXXXXXX\n-----END RSA PRIVATE KEY-----' GITHUB_APP_CLIENTID=XXX.XXXXXXXXXXXXXXXX GITHUB_APP_CLIENTSECRET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX node getinstallationid.js
+GITHUB_USERNAME=XXXXXXX GITHUB_APPID=XXXXXX GITHUB_APP_PRIVATEKEY=XXXXXXXXXXXXXXXXXXXXX GITHUB_APP_CLIENTID=XXX.XXXXXXXXXXXXXXXX GITHUB_APP_CLIENTSECRET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX node getinstallationid.js
 ~~~
 
 ## Running Dashboard
@@ -87,7 +87,7 @@ GITHUB_USERNAME=XXXXXXX GITHUB_APPID=XXXXXX GITHUB_APP_PRIVATEKEY='-----BEGIN RS
 Requires docker installed locally.
 
 ~~~bash
-docker run --rm -td -p 8080:8080 --env GITHUB_USERNAME=XXXXXXX --env GITHUB_APPID=XXXXXX --env GITHUB_APP_PRIVATEKEY='-----BEGIN RSA PRIVATE KEY-----\nXXXXXX\nXXXXXXX\nXXXXXXX\n-----END RSA PRIVATE KEY-----' --env GITHUB_APP_CLIENTID=XXX.XXXXXXXXXXXXXXXX --env GITHUB_APP_CLIENTSECRET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --env GITHUB_APP_INSTALLATIONID=XXXXXXX ghcr.io/chriskinsman/github-action-dashboard:edge node index.js
+docker run --rm -td -p 8080:8080 --env GITHUB_USERNAME=XXXXXXX --env GITHUB_APPID=XXXXXX --env GITHUB_APP_PRIVATEKEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXX --env GITHUB_APP_CLIENTID=XXX.XXXXXXXXXXXXXXXX --env GITHUB_APP_CLIENTSECRET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --env GITHUB_APP_INSTALLATIONID=XXXXXXX ghcr.io/chriskinsman/github-action-dashboard:edge node index.js
 ~~~
 
 #### Option 2
@@ -100,7 +100,7 @@ cd client
 npm ci
 npm run build
 cd ..
-GITHUB_USERNAME=XXXXXXX GITHUB_APPID=XXXXXX GITHUB_APP_PRIVATEKEY='-----BEGIN RSA PRIVATE KEY-----\nXXXXXX\nXXXXXXX\nXXXXXXX\n-----END RSA PRIVATE KEY-----' GITHUB_APP_CLIENTID=XXX.XXXXXXXXXXXXXXXX GITHUB_APP_CLIENTSECRET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX GITHUB_APP_INSTALLATIONID=XXXXXXX node index.js
+GITHUB_USERNAME=XXXXXXX GITHUB_APPID=XXXXXX GITHUB_APP_PRIVATEKEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX GITHUB_APP_CLIENTID=XXX.XXXXXXXXXXXXXXXX GITHUB_APP_CLIENTSECRET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX GITHUB_APP_INSTALLATIONID=XXXXXXX node index.js
 ~~~
 
 Open your browser to http://localhost:8080
