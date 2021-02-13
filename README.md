@@ -36,12 +36,12 @@ Steps:
 * Click Developer Settings
 * Click GitHub Apps
 * Click New GitHub App
-** Add an app name and homepage url
-** Repository Permissions:
-*** Action: read-only
-** Where can this GibHub App be installed: Only on this account
-** Should look like: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardNewGitHubApp.png)
-** Click Create GitHub App 
+    * Add an app name and homepage url
+    * Repository Permissions:
+        * Action: read-only
+    * Where can this GibHub App be installed: Only on this account
+    * Should look like: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardNewGitHubApp.png)
+    * Click Create GitHub App 
 * You should now be on the general settings page for the app
 * Click Generate a new client secret and save off the client secret as it will disappear after you navigate off the page.
 * Click Generate a private key
