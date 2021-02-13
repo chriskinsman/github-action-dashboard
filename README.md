@@ -40,13 +40,13 @@ Steps:
 ** Repository Permissions:
 *** Action: read-only
 ** Where can this GibHub App be installed: Only on this account
-* Should look like: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardNewGitHubApp.png)
+** Should look like: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardNewGitHubApp.png)
 ** Click Create GitHub App 
 * You should now be on the general settings page for the app
 * Click Generate a new client secret and save off the client secret as it will disappear after you navigate off the page.
 * Click Generate a private key
 * Should look like: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardGeneralSettings.png)
-* Change to Install App page ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardInstall.png)
+* Change to Install App page: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardInstall.png)
 * Click Install
 * You will get a permissions page like this: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardPermissions.png)
 * Click install
@@ -57,7 +57,7 @@ The dashboard has all of it's parameters passed via environment variables.
 
 ### Variables
 
-* GITHUB_USERNAME or GITHUB_ORG - Only one valid is allowed.  If both are specified GITHUB_ORG takes precedence and the GITHUB_USERNAME is ignored.
+* GITHUB_USERNAME or GITHUB_ORG - Only one is valid.  If both are specified GITHUB_ORG takes precedence and the GITHUB_USERNAME is ignored.
 * GITHUB_APPID - The AppId from the GitHub App general settings page.
 * GITHUB_APP_PRIVATEKEY - The base64 encoded private key from the GitHub App general settings page. 
 * GITHUB_APP_CLIENTID - The client id from the GitHub App general settings page.
