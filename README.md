@@ -44,7 +44,7 @@ Steps:
     * Click Create GitHub App 
 * You should now be on the general settings page for the app
 * Click Generate a new client secret and save off the client secret as it will disappear after you navigate off the page.
-* Click Generate a private key
+* Click Generate a private key.  It will download a .pem file that you need to base64 encode.
 * Should look like: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardGeneralSettings.png)
 * Change to Install App page: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardInstall.png)
 * Click Install
