@@ -4,7 +4,7 @@
 
 When our current CI/CD provider shutdown I found myself evaluating GitHub actions as an alternative. Great solution with one problem. There was no single pane of glass to see the status of all the builds in our GitHub organization. Instead you had to go into each repo, check the action status, etc.
 
-Looked around for solutions to the problem and found very few.  Meercode was a SaaS that was available but connecting it to my GitHub account at the time I tested it it required granting it permission to act on my behalf. I couldn't see a way that my employer would be cool with that.
+I looked around for solutions to the problem and found very few.  Meercode was a SaaS that was available but connecting it to my GitHub account at the time I tested it it required granting it permission to act on my behalf. I couldn't see a way that my employer would be cool with that.
 
 A self hosted solution seemed like the way to go but I couldn't really find any.  Surprising given the popularity of GitHub.
 
@@ -40,12 +40,16 @@ Steps:
 ** Repository Permissions:
 *** Action: read-only
 ** Where can this GibHub App be installed: Only on this account
-** Click Create GitHub App
+* Should look like: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardNewGitHubApp.png)
+** Click Create GitHub App 
 * You should now be on the general settings page for the app
 * Click Generate a new client secret and save off the client secret as it will disappear after you navigate off the page.
 * Click Generate a private key
-* Change to Install App page
+* Should look like: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardGeneralSettings.png)
+* Change to Install App page ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardInstall.png)
 * Click Install
+* You will get a permissions page like this: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardPermissions.png)
+* Click install
 
 ## Configuring Dashboard
 
