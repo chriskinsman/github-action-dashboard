@@ -1,5 +1,6 @@
 const debug = require('debug')('action-dashboard:webhooks');
 if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
+
     const { Webhooks } = require("@octokit/webhooks");
     const github = require('./github');
 
@@ -30,7 +31,17 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
     });
 
     if (!process.env.DOCKER_BUILD) {
-        require("http").createServer(webhooks.middleware).listen({ port: GITHUB_APP_WEBHOOK_PORT }, () => {
+        require("http").createServer((req, res) => {
+            debug(`received request path: ${req.url}`);
+            if (req.url === '/ping') {
+                debug('ping');
+                res.statusCode = 200;
+                res.end();
+            }
+            else {
+                webhooks.middleware(req, res);
+            }
+        }).listen({ port: GITHUB_APP_WEBHOOK_PORT }, () => {
             console.log(`Listening for webhooks on ${GITHUB_APP_WEBHOOK_PORT}`);
         });
     }
