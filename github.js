@@ -22,7 +22,7 @@ const _clientSecret = process.env.GITHUB_APP_CLIENTSECRET;
 const _installationId = process.env.GITHUB_APP_INSTALLATIONID;
 
 // Cache all workflows to speed up refresh
-let _runs = [];
+const _runs = [];
 let _refreshingRuns = false;
 
 const octokit = new MyOctoKit({
@@ -196,7 +196,8 @@ GitHub.refreshRuns = async function refreshRuns() {
 
 GitHub.getInitialData = async function getInitialData() {
     if (_runs.length === 0 && !_refreshingRuns) {
-        await GitHub.refreshRuns();
+        debug('getInitialData calling refreshRuns');
+        GitHub.refreshRuns();
     }
 
     return _runs;
