@@ -195,6 +195,7 @@ GitHub.refreshRuns = async function refreshRuns() {
 };
 
 GitHub.getInitialData = async function getInitialData() {
+    debug(`getInitialData _runs.length: ${_runs.length}`);
     if (_runs.length === 0 && !_refreshingRuns) {
         debug('getInitialData calling refreshRuns');
         GitHub.refreshRuns();
