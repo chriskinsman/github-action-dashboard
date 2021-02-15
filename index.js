@@ -2,13 +2,16 @@ try {
     const { resolve } = require('path');
     const history = require('connect-history-api-fallback');
     const express = require('express');
-    const configureAPI = require('./configure');
     const app = express();
+    const server = require('http').createServer(app);
+
+    const configureAPI = require('./configure');
 
     const { PORT = 8080 } = process.env;
 
     // API
-    configureAPI(app);
+    configureAPI.before(app);
+    configureAPI.after(app, server);
 
     // UI
     const publicPath = resolve(__dirname, './client/dist');
@@ -22,7 +25,7 @@ try {
     });
 
     // Go
-    app.listen(PORT, () => console.log(`App running on port ${PORT}`));
+    server.listen(PORT, () => console.log(`Action Dashboard running on port ${PORT}`));
 }
 catch (e) {
     console.error('Error on startup');

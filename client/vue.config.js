@@ -8,7 +8,9 @@ module.exports = {
     })
   },
   devServer: {
-    before: configureAPI
+    before: configureAPI.before,
+    // Can't figure out how to connect up socket.io as part of webpack devServer
+    //after: configureAPI.after
   },
 
   transpileDependencies: [

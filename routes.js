@@ -15,8 +15,8 @@ router.get('/initialData', async function (req, res, next) {
 });
 
 router.get('/runs/:owner/:repo/:workflow_id', async function (req, res, next) {
-    const runs = await gitHub.refreshWorkflow(req.params.owner, req.params.repo, parseInt(req.params.workflow_id));
-    res.send(runs);
+    gitHub.refreshWorkflow(req.params.owner, req.params.repo, parseInt(req.params.workflow_id));
+    res.send();
 });
 
 module.exports = router;

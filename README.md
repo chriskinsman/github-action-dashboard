@@ -11,21 +11,19 @@ A self hosted solution seemed like the way to go but I couldn't really find any.
 ## Limitations
 
 * Single organization/username.  Currently the dashboard requires you to specify the organization or the username of the repositories which show on the dashboard. It doesn't support multiple organizations or usernames.
-* Currently the dashboard doesn't support GitHub webhooks.  Supporting them in a self hosted solution in a secure fashion isn't simple.  MVP just uses the GitHub apis. 
-
 
 ## How it works
 
 * Upon startup all repositories for the organization/username are iterated. 
 * Each repository is checked for workflows.
-* All repositories with workflows are cached.
-* Each workflow has it's runs listed and the most recent run for each branch are returned.
+* Each workflow has it's runs listed 
+* The most recent run for each branch is returned.
 
-Every 5 minutes the runs for the cached repositories/workflows are refreshed.  Five minutes was chosen so as to not hit GitHub API limits.
+Every 15 minutes this process is repeated.  Fifteen minutes was chosen so as to not hit GitHub API limits.
 
 When you click the refresh button in the dashboard it refreshes all runs associated with that workflow across all branches.  This is refreshed server side so that other consumers of the dashboard also see the update prior to the refresh of all data.
 
-The dashboard itself updates once a minute.  It will receive whatever data is currently cached on the server when it refreshes.
+When a workflow_run webhook is received the the central data is update and then it is sent to all clients to refresh their display.
 
 ## Setup GitHub App
 
@@ -37,9 +35,13 @@ Steps:
 * Click GitHub Apps
 * Click New GitHub App
     * Add an app name and homepage url
+    * Put your endpoint in for the webhook url - This is optional. If you don't configure this the dashboard lag action status.  For testing you can use https://smee.io but in production you will likely have to look at a solution like https://ngrok.com or https://inlets.dev
+    * Put in a webhook secret
     * Repository Permissions:
         * Action: read-only
-    * Where can this GibHub App be installed: Only on this account
+    * Subscribe to events:
+        * Workflow run
+    * Where can this GibHub App be installed: Only on this account    
     * Should look like: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardNewGitHubApp.png)
     * Click Create GitHub App 
 * You should now be on the general settings page for the app
@@ -63,6 +65,7 @@ The dashboard has all of it's parameters passed via environment variables.
 * GITHUB_APP_CLIENTID - The client id from the GitHub App general settings page.
 * GITHUB_APP_CLIENTSECRET - The client secret from the GitHub App general settings page.
 * GITHUB_APP_INSTALLATIONID - Installation id that can be retrieved using steps in the next section.
+* GITHUB_APP_WEBHOOK_SECRET - Optional.  If you don't supply the dashboard will not setup webhooks and only update every 15 minutes.
 * DEBUG=action-dashboard:* - Optional setting to help in debugging
 
 ### Installation Id

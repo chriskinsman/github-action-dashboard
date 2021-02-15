@@ -41,24 +41,28 @@
 
 <script>
 import axios from "axios";
+import findIndex from "lodash-es/findIndex";
 
 export default {
+    sockets: {
+        updatedRun(run) {
+            console.log("updatedRun runId: " + run.runId);
+            const index = findIndex(this.runs, { workflowId: run.workflowId, branch: run.branch });
+            if (index >= 0) {
+                this.$set(this.runs, index, run);
+            } else {
+                this.runs.push(run);
+            }
+        },
+    },
     mounted() {
         this.getData();
-        this.refreshId = setInterval(this.getData, 1000 * 60);
-    },
-    beforeUnmount() {
-        if (this.refreshId) {
-            clearInterval(this.refreshId);
-            this.refreshId = null;
-        }
     },
     data() {
         return {
             search: "",
             runs: [],
             loading: false,
-            refreshId: null,
         };
     },
     computed: {
@@ -82,31 +86,25 @@ export default {
             axios
                 .get("/api/initialData")
                 .then((result) => {
+                    console.log("getData results");
                     this.runs = result.data;
                 })
                 .catch((err) => {
+                    console.log("getData error");
                     console.error(err);
                 })
                 .finally(() => {
+                    console.log("getData finally");
                     this.loading = false;
                 });
         },
         refreshRun(run) {
             // This
             run.status = "Refreshing";
-            this.loading = true;
             // Get all new runs for workflow_id
-            axios
-                .get(`/api/runs/${run.owner}/${run.repo}/${run.workflowId}`)
-                .then((result) => {
-                    this.runs = result.data;
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
+            axios.get(`/api/runs/${run.owner}/${run.repo}/${run.workflowId}`).catch((err) => {
+                console.log("refreshRun", err);
+            });
         },
         filterOnlyCapsText(value, search) {
             return value != null && search != null && typeof value === "string" && value.toString().indexOf(search) !== -1;
@@ -120,6 +118,7 @@ export default {
                     return "red";
 
                 case "in_progress":
+                case "queued":
                     return "yellow";
 
                 default:

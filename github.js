@@ -6,6 +6,8 @@ const debug = require('debug')('action-dashboard:github');
 const _ = require('lodash');
 const dayjs = require('dayjs');
 
+const runStatus = require('./runstatus');
+
 const MyOctoKit = Octokit
     .plugin(throttling)
     .plugin(retry);
@@ -20,7 +22,6 @@ const _clientSecret = process.env.GITHUB_APP_CLIENTSECRET;
 const _installationId = process.env.GITHUB_APP_INSTALLATIONID;
 
 // Cache all workflows to speed up refresh
-const _reposWithWorkflows = [];
 let _runs = [];
 let _refreshingRuns = false;
 
@@ -66,7 +67,7 @@ GitHub.listRepos = async function listRepos() {
         console.error('Error getting repos', e);
         return [];
     }
-}
+};
 
 GitHub.listWorkflowsForRepo = async function listWorkflowsForRepo(repoName, repoOwner) {
     try {
@@ -76,26 +77,26 @@ GitHub.listWorkflowsForRepo = async function listWorkflowsForRepo(repoName, repo
         console.error('Error getting workflows', e);
         return [];
     }
-}
+};
 
 GitHub.listWorkflows = async function listWorkflows() {
-    if (_reposWithWorkflows.length === 0) {
-        const repos = await GitHub.listRepos();
-        for (const repo of repos) {
-            debug(`repo: ${repo.name}`);
-            const workflows = await GitHub.listWorkflowsForRepo(repo.name, repo.owner.login);
-            if (workflows.length > 0) {
-                _reposWithWorkflows.push({
-                    name: repo.name,
-                    ownerLogin: repo.owner.login,
-                    workflows: workflows
-                });
-            }
+    const reposWithWorkflows = [];
+    const repos = await GitHub.listRepos();
+    for (const repo of repos) {
+        debug(`repo: ${repo.name}`);
+        const workflows = await GitHub.listWorkflowsForRepo(repo.name, repo.owner.login);
+        if (workflows.length > 0) {
+            reposWithWorkflows.push({
+                name: repo.name,
+                ownerLogin: repo.owner.login,
+                workflows: workflows
+            });
         }
     }
 
-    return _reposWithWorkflows;
-}
+    return reposWithWorkflows;
+};
+
 
 GitHub.getMostRecentRuns = async function getMostRecentRuns(repoOwner, repoName, workflowId) {
     try {
@@ -140,20 +141,27 @@ GitHub.getMostRecentRuns = async function getMostRecentRuns(repoOwner, repoName,
         console.error('Error getting runs', e);
         return [];
     }
-}
+};
 
 GitHub.refreshWorkflow = async function refreshWorkflow(repoOwner, repoName, workflowId) {
     const runs = await GitHub.getMostRecentRuns(repoOwner, repoName, workflowId);
+    GitHub.mergeRuns(runs);
+};
 
+GitHub.mergeRuns = function mergeRuns(runs) {
     // Merge into cache
     runs.forEach((run) => {
         const index = _.findIndex(_runs, { workflowId: run.workflowId, branch: run.branch });
-        if (index > 0) {
+        if (index >= 0) {
             _runs[index] = run;
         }
+        else {
+            _runs.push(run);
+        }
+        runStatus.updatedRun(run);
     });
 
-    return _runs;
+    debug('merged runs', _runs);
 };
 
 GitHub.refreshRuns = async function refreshRuns() {
@@ -162,6 +170,7 @@ GitHub.refreshRuns = async function refreshRuns() {
         return;
     }
 
+    debug('Starting refreshing runs');
     try {
         _refreshingRuns = true;
         const rows = [];
@@ -171,9 +180,7 @@ GitHub.refreshRuns = async function refreshRuns() {
                 debug(`workflow: ${workflow.name}`);
                 const runs = await GitHub.getMostRecentRuns(repo.ownerLogin, repo.name, workflow.id);
                 // Not using apply or spread in case there are a large number of runs returned
-                runs.forEach((run) => {
-                    rows.push(run);
-                })
+                GitHub.mergeRuns(runs);
             }
         }
 
@@ -182,6 +189,7 @@ GitHub.refreshRuns = async function refreshRuns() {
         console.error('Error getting initial data', e);
     }
     finally {
+        debug('Finished refreshing runs');
         _refreshingRuns = false;
     }
 };
@@ -199,9 +207,9 @@ if (!process.env.DOCKER_BUILD) {
     // Load the initial set
     GitHub.refreshRuns();
 
-    debug('Setting interval to refreshRuns at 5m');
-    // Refresh by default every five minutes
-    setInterval(GitHub.refreshRuns, 1000 * 60 * 5);
+    debug('Setting interval to refreshRuns at 15m');
+    // Refresh by default every fifteeen minutes
+    setInterval(GitHub.refreshRuns, 1000 * 60 * 15);
 }
 
 module.exports = GitHub;
