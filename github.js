@@ -156,7 +156,6 @@ GitHub.refreshRuns = async function refreshRuns() {
     debug('Starting refreshing runs');
     try {
         _refreshingRuns = true;
-        const rows = [];
         const repos = await GitHub.listRepos();
         for (const repo of repos) {
             debug(`repo: ${repo.name}`);
@@ -170,8 +169,6 @@ GitHub.refreshRuns = async function refreshRuns() {
                 }
             }
         }
-
-        _runs = rows;
     } catch (e) {
         console.error('Error getting initial data', e);
     }
@@ -181,7 +178,7 @@ GitHub.refreshRuns = async function refreshRuns() {
     }
 };
 
-GitHub.getInitialData = async function getInitialData() {
+GitHub.getInitialData = function getInitialData() {
     debug(`getInitialData _runs.length: ${_runs.length}`);
     if (_runs.length === 0 && !_refreshingRuns) {
         debug('getInitialData calling refreshRuns');

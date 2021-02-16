@@ -9,12 +9,12 @@ router.get('/owner', function (req, res, next) {
     res.send(owner);
 });
 
-router.get('/initialData', async function (req, res, next) {
-    const initialData = await gitHub.getInitialData();
+router.get('/initialData', function (req, res, next) {
+    const initialData = gitHub.getInitialData();
     res.send(initialData);
 });
 
-router.get('/runs/:owner/:repo/:workflow_id', async function (req, res, next) {
+router.get('/runs/:owner/:repo/:workflow_id', function (req, res, next) {
     gitHub.refreshWorkflow(req.params.owner, req.params.repo, parseInt(req.params.workflow_id));
     res.send();
 });
