@@ -22,7 +22,7 @@ const _clientSecret = process.env.GITHUB_APP_CLIENTSECRET;
 const _installationId = process.env.GITHUB_APP_INSTALLATIONID;
 
 // Cache all workflows to speed up refresh
-const _runs = [];
+let _runs = [];
 let _refreshingRuns = false;
 
 const octokit = new MyOctoKit({
@@ -79,29 +79,11 @@ GitHub.listWorkflowsForRepo = async function listWorkflowsForRepo(repoName, repo
     }
 };
 
-GitHub.listWorkflows = async function listWorkflows() {
-    const reposWithWorkflows = [];
-    const repos = await GitHub.listRepos();
-    for (const repo of repos) {
-        debug(`repo: ${repo.name}`);
-        const workflows = await GitHub.listWorkflowsForRepo(repo.name, repo.owner.login);
-        if (workflows.length > 0) {
-            reposWithWorkflows.push({
-                name: repo.name,
-                ownerLogin: repo.owner.login,
-                workflows: workflows
-            });
-        }
-    }
-
-    return reposWithWorkflows;
-};
-
 
 GitHub.getMostRecentRuns = async function getMostRecentRuns(repoOwner, repoName, workflowId) {
     try {
         const sevenDaysAgo = dayjs().subtract(7, 'day');
-        const runs = await octokit.paginate(octokit.actions.listWorkflowRuns, { repo: repoName, owner: repoOwner, workflow_id: workflowId, per_page: 1, page: 1 });
+        const runs = await octokit.paginate(octokit.actions.listWorkflowRuns, { repo: repoName, owner: repoOwner, workflow_id: workflowId });
         if (runs.length > 0) {
             const groupedRuns = _.groupBy(runs, 'head_branch')
             const rows = _.reduce(groupedRuns, (result, runs, branch) => {
@@ -151,6 +133,7 @@ GitHub.refreshWorkflow = async function refreshWorkflow(repoOwner, repoName, wor
 GitHub.mergeRuns = function mergeRuns(runs) {
     // Merge into cache
     runs.forEach((run) => {
+        console.dir(run);
         const index = _.findIndex(_runs, { workflowId: run.workflowId, branch: run.branch });
         if (index >= 0) {
             _runs[index] = run;
@@ -174,13 +157,17 @@ GitHub.refreshRuns = async function refreshRuns() {
     try {
         _refreshingRuns = true;
         const rows = [];
-        const repos = await GitHub.listWorkflows();
+        const repos = await GitHub.listRepos();
         for (const repo of repos) {
-            for (const workflow of repo.workflows) {
-                debug(`workflow: ${workflow.name}`);
-                const runs = await GitHub.getMostRecentRuns(repo.ownerLogin, repo.name, workflow.id);
-                // Not using apply or spread in case there are a large number of runs returned
-                GitHub.mergeRuns(runs);
+            debug(`repo: ${repo.name}`);
+            const workflows = await GitHub.listWorkflowsForRepo(repo.name, repo.owner.login);
+            if (workflows.length > 0) {
+                for (const workflow of workflows) {
+                    debug(`workflow: ${workflow.name}`);
+                    const runs = await GitHub.getMostRecentRuns(repo.owner.login, repo.name, workflow.id);
+                    // Not using apply or spread in case there are a large number of runs returned
+                    GitHub.mergeRuns(runs);
+                }
             }
         }
 

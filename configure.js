@@ -9,7 +9,7 @@ else {
     require('dotenv').config()
 }
 const debug = require('debug')('action-dashboard:configure');
-debug(`environment`, process.env);
+//debug(`environment`, process.env);
 
 const bodyParser = require('body-parser')
 const routes = require('./routes')
