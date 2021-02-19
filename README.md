@@ -23,14 +23,14 @@ Every 15 minutes this process is repeated.  Fifteen minutes was chosen so as to 
 
 When you click the refresh button in the dashboard it refreshes all runs associated with that workflow across all branches.  This is refreshed server side so that other consumers of the dashboard also see the update prior to the refresh of all data.
 
-When a workflow_run webhook is received the the central data is update and then it is sent to all clients to refresh their display.
+When a workflow_run webhook is received the the central data is updated and the update is sent to all clients to refresh their displays via websockets.
 
 ## Setup GitHub App
 
-The dashboard runs as a GitHub App.  It does not automatically register itself as a GitHub app.  Automatic registration is difficult if the dashboard is private and not exposed on the internet.  Instead you need to manually setup a GitHub app for your personal account or an organization.
+The dashboard runs as a GitHub App.  It does not automatically register itself as a GitHub app.  Automatic registration is difficult if the dashboard is private and not exposed on the internet.  Instead you need to manually setup a GitHub app for your organization or  username.
 
 Steps:
-* Go into the settings for your org or personal account
+* Go into the settings for your organization or username
 * Click Developer Settings
 * Click GitHub Apps
 * Click New GitHub App
