@@ -70,8 +70,16 @@ The dashboard has all of it's parameters passed via environment variables.
 
 ### Installation Id
 
-For some reason GitHub doesn't expose the installation id anywhere in the UI. I have provided a utility to retrieve it.  You will need all the variables from the previous section with the exception of GITHUB_APP_INSTALLATIONID to do this.
+GitHub doesn't make the installation id super obvious in the UI. Here is how to obtain the installation id.
 
+* Go into the settings for your organization or username
+* Click Developer Settings
+* Click GitHub Apps
+* Click Configure on GitHub Action Dashboard
+* In the URL, the digits after the slash are your installation id.
+
+
+Alternatively I have provided a utility to obtain the installation id. You will need all the variables from the previous section with the exception of GITHUB_APP_INSTALLATIONID set to do this.
 #### Option 1
 
 Requires docker installed locally.
