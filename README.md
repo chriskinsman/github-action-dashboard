@@ -109,6 +109,13 @@ docker run --rm -td -p 8080:8080 --env GITHUB_USERNAME=XXXXXXX --env GITHUB_APPI
 
 #### Option 2
 
+~~~bash
+cp .env.template .env
+docker-compose up -d gad gad-ngrok
+~~~
+
+#### Option 3
+
 Requires nodejs installed locally.
 
 ~~~bash
