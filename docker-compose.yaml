@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  gad:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: github-action-dashboard:latest
+    container_name: gad
+    #command: ["tail", "-f", "/dev/null"]
+    command: ["node","index.js"]
+    ports:
+      - "${HOST_PORT:-8080}:8080"
+    environment:
+      - GITHUB_USERNAME=${GITHUB_USERNAME}
+      - GITHUB_APPID=${GITHUB_APPID}
+      - GITHUB_APP_PRIVATEKEY=${GITHUB_APP_PRIVATEKEY}
+      - GITHUB_APP_CLIENTID=${GITHUB_APP_CLIENTID}
+      - GITHUB_APP_CLIENTSECRET=${GITHUB_APP_CLIENTSECRET}
+      - GITHUB_APP_INSTALLATIONID=${GITHUB_APP_INSTALLATIONID}
+      - GITHUB_APP_WEBHOOK_SECRET=${GITHUB_APP_WEBHOOK_SECRET}
+      - GITHUB_APP_WEBHOOK_PORT=8081
+      - DEBUG=${DEBUG}
+
+  gad-ngrok:
+    image: wernight/ngrok:latest
+    container_name: gad-ngrok
+    environment:
+      - NGROK_AUTH=${NGROK_AUTH}
+      - NGROK_SUBDOMAIN=${NGROK_SUBDOMAIN}
+      - NGROK_DEBUG=true
+      - NGROK_PORT=gad:8081
