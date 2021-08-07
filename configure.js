@@ -17,6 +17,7 @@ const debug = require('debug')('action-dashboard:configure');
 
 const bodyParser = require('body-parser')
 const routes = require('./routes')
+const middleware = require('./webhooks')
 
 const { DASHBOARD_SESSION_KEY = "3KYu07W85yDjIhUtBVHa61gmF" } = process.env;
 
@@ -33,7 +34,6 @@ module.exports = {
           app.use(passport.session());
         }
         app.use('/api', routes);
-        
         if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
             debug(`Setting up webhooks path: /webhook`);
             app.use('/webhook', middleware);
@@ -44,6 +44,3 @@ module.exports = {
         runStatus.init(server);
     }
 }
-
-// Loads webhook support if GITHUB_APP_WEBHOOK_SECRET defined
-const webhooks = require('./webhooks');
