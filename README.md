@@ -2,6 +2,8 @@
 
 ![ScreenShot](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardScreenShot.png)
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 When our current CI/CD provider shutdown I found myself evaluating GitHub actions as an alternative. Great solution with one problem. There was no single pane of glass to see the status of all the builds in our GitHub organization. Instead you had to go into each repo, check the action status, etc.
 
 I looked around for solutions to the problem and found very few.  Meercode was a SaaS that was available but connecting it to my GitHub account at the time I tested it it required granting it permission to act on my behalf. I couldn't see a way that my employer would be cool with that.
@@ -115,6 +117,10 @@ docker-compose up -d gad gad-ngrok
 ~~~
 
 #### Option 3
+Start it on Heroku https://heroku.com/deploy 
+
+Use https://YOURAPP.herokuapp/webhook and the autocenerated secret in your Github app. 
+#### Option 4
 
 Requires nodejs installed locally.
 

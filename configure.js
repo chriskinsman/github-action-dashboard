@@ -13,17 +13,20 @@ const debug = require('debug')('action-dashboard:configure');
 
 const bodyParser = require('body-parser')
 const routes = require('./routes')
+const middleware = require('./webhooks')
 
 module.exports = {
     before: (app) => {
         app.use(bodyParser.json());
         app.use('/api', routes);
+
+        if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
+            debug(`Setting up webhooks path: /webhook`);
+            app.use('/webhook', middleware);
+        }
     },
     after: (app, server) => {
         // Attach socket.io to server
         runStatus.init(server);
     }
 }
-
-// Loads webhook support if GITHUB_APP_WEBHOOK_SECRET defined
-const webhooks = require('./webhooks');

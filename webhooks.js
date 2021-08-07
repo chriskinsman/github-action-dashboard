@@ -1,15 +1,13 @@
 const debug = require('debug')('action-dashboard:webhooks');
 if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
 
-    const { Webhooks } = require("@octokit/webhooks");
+    const { Webhooks, createNodeMiddleware } = require("@octokit/webhooks");
     const github = require('./github');
 
     const webhooks = new Webhooks({
         secret: process.env.GITHUB_APP_WEBHOOK_SECRET,
     });
 
-    const { GITHUB_APP_WEBHOOK_PORT = 8081 } = process.env;
-    debug(`Setting up webhooks port: ${GITHUB_APP_WEBHOOK_PORT}`);
 
     webhooks.on('workflow_run', ({ id, name, payload }) => {
         debug(`workflow_run received id: ${id}, name: ${name}`, payload);
@@ -30,7 +28,10 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
         }]);
     });
 
-    if (!process.env.DOCKER_BUILD) {
+    if (!process.env.DOCKER_BUILD && process.env.GITHUB_APP_WEBHOOK_PORT) {
+        const { GITHUB_APP_WEBHOOK_PORT = 8081 } = process.env;
+        debug(`Setting up webhooks port: ${GITHUB_APP_WEBHOOK_PORT}`);
+
         require("http").createServer((req, res) => {
             debug(`received request path: ${req.url}`);
             if (req.url === '/ping') {
@@ -45,4 +46,8 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
             console.log(`Listening for webhooks on ${GITHUB_APP_WEBHOOK_PORT}`);
         });
     }
+
+    const middleware = createNodeMiddleware(webhooks, { path: "/webhook" });
+
+    module.exports = middleware;
 }

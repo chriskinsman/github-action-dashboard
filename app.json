@@ -1,0 +1,49 @@
+{
+    "name": "github action dashboard",
+    "description": "A dashboard to display all Actions of a organisation or user",
+    "keywords": [
+      "github",
+      "dashboard"
+    ],
+    "website": "https://github.com/chriskinsman/github-action-dashboard",
+    "repository": "https://github.com/chriskinsman/github-action-dashboard",
+    "logo": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+    "success_url": "/",
+    "env": {
+
+      "GITHUB_USERNAME": {
+        "description": "Github Username",
+        "required": false
+      },
+      "GITHUB_ORG": {
+        "description": "Github Organisation, Only one is valid. If both are specified GITHUB_ORG takes precedence and the GITHUB_USERNAME is ignored.",
+        "required": false
+      },
+      "GITHUB_APPID": {
+        "description": "The AppId from the GitHub App general settings page."
+      },
+      "GITHUB_APP_PRIVATEKEY": {
+        "description": "The base64 encoded private key from the GitHub App general settings page."
+      },
+      "GITHUB_APP_CLIENTSECRET": {
+        "description": "The client secret from the GitHub App general settings page."
+      },
+      "GITHUB_APP_INSTALLATIONID": {
+        "description": "Installation id that can be retrieved using steps in the next section."
+      },
+      "GITHUB_APP_WEBHOOK_SECRET": {
+        "description": "Optional. If you don't supply the dashboard will not setup webhooks and only update every 15 minutes.",
+        "generator": "secret",
+        "required": false
+      },
+      "DEBUG": {
+        "description": "action-dashboard:* - Optional setting to help in debugging",
+        "required": false
+      },
+      "NODE_ENV": {
+          "description": "required in Buildprocess",
+          "default": "development",
+          "required": false
+      }
+    }
+  }

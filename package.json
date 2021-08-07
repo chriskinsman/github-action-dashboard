@@ -4,29 +4,32 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "serve": "./node_modules/nodemon/bin/nodemon.js index.js --ignore 'client/*.js'  --exec 'npm run lint && node'",
-    "lint": "./node_modules/.bin/eslint '**/*.js' --ignore-pattern 'client/dist/' "
+    "lint": "./node_modules/.bin/eslint '**/*.js' --ignore-pattern 'client/dist/' ",
+    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "@octokit/auth-app": "^2.11.0",
-    "@octokit/plugin-retry": "^3.0.7",
-    "@octokit/plugin-throttling": "^3.4.1",
-    "@octokit/rest": "^18.1.0",
-    "@octokit/webhooks": "^8.3.0",
+    "@octokit/plugin-retry": "^3.0.9",
+    "@octokit/plugin-throttling": "^3.5.1",
+    "@octokit/rest": "^18.9.0",
+    "@octokit/webhooks": "^8.9.0",
     "body-parser": "^1.19.0",
     "connect-history-api-fallback": "^1.6.0",
-    "dayjs": "^1.10.4",
-    "debug": "^4.3.1",
-    "dotenv": "^8.2.0",
+    "dayjs": "^1.10.6",
+    "debug": "^4.3.2",
+    "dotenv": "^8.6.0",
     "express": "^4.17.1",
-    "lodash": "^4.17.20",
-    "socket.io": "^3.1.1"
+    "express-github-webhook": "^1.0.6",
+    "lodash": "^4.17.21",
+    "socket.io": "^3.1.2"
   },
   "devDependencies": {
-    "eslint": "^7.2.0",
-    "nodemon": "^2.0.4"
+    "eslint": "^7.32.0",
+    "nodemon": "^2.0.12"
   }
 }
