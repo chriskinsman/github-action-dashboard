@@ -1,5 +1,6 @@
 <template>
     <v-container :fluid="true">
+        <stats v-bind:stats="stats"></stats>
         <v-data-table
             :headers="headers"
             :items="runs"
@@ -42,6 +43,7 @@
 <script>
 import axios from "axios";
 import findIndex from "lodash-es/findIndex";
+import Stats from "./stats.vue";
 
 export default {
     sockets: {
@@ -62,6 +64,7 @@ export default {
         return {
             search: "",
             runs: [],
+            stats: {},
             loading: false,
         };
     },
@@ -79,6 +82,9 @@ export default {
                 { text: "", value: "actions", sortable: false },
             ];
         },
+    },  
+    components: {
+        'stats': Stats
     },
     methods: {
         getData() {
@@ -87,7 +93,8 @@ export default {
                 .get("/api/initialData")
                 .then((result) => {
                     console.log("getData results");
-                    this.runs = result.data;
+                    this.runs = result.data.runs;
+                    this.stats = result.data.stats;
                 })
                 .catch((err) => {
                     console.log("getData error");

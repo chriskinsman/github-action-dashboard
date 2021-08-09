@@ -24,6 +24,7 @@ const _installationId = process.env.GITHUB_APP_INSTALLATIONID;
 // Cache all workflows to speed up refresh
 let _runs = [];
 let _refreshingRuns = false;
+let _stats = {};
 
 const octokit = new MyOctoKit({
     auth: {
@@ -157,18 +158,25 @@ GitHub.refreshRuns = async function refreshRuns() {
     try {
         _refreshingRuns = true;
         const repos = await GitHub.listRepos();
+        _stats.repos_total = repos.length;
+        _stats.workflows_total = 0;
+        _stats.repos_with_workflows = {};
         for (const repo of repos) {
             debug(`repo: ${repo.name}`);
             const workflows = await GitHub.listWorkflowsForRepo(repo.name, repo.owner.login);
             if (workflows.length > 0) {
+                _.merge(_stats.repos_with_workflows, { [repo.name]: workflows.length });
                 for (const workflow of workflows) {
                     debug(`workflow: ${workflow.name}`);
+                    _stats.workflows_total++;
                     const runs = await GitHub.getMostRecentRuns(repo.owner.login, repo.name, workflow.id);
                     // Not using apply or spread in case there are a large number of runs returned
                     GitHub.mergeRuns(runs);
                 }
             }
         }
+        _stats.repos_with_workflows_total = Object.keys(_stats.repos_with_workflows).length
+        debug(_stats);
     } catch (e) {
         console.error('Error getting initial data', e);
     }
@@ -185,7 +193,7 @@ GitHub.getInitialData = function getInitialData() {
         GitHub.refreshRuns();
     }
 
-    return _runs;
+    return {"stats": _stats, "runs": _runs};
 };
 
 if (!process.env.DOCKER_BUILD) {
