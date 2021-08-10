@@ -51,7 +51,7 @@
             </template>
 
             <template v-slot:item.actions="{ item }">
-                <v-icon small @click="refreshRun(item)"> mdi-refresh </v-icon>
+                <v-icon large @click="refreshRun(item)"> mdi-refresh </v-icon>
             </template>
         </v-data-table>
     </v-container>
