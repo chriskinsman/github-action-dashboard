@@ -28,10 +28,28 @@
             </template>
 
             <template v-slot:item.status="{ item }">
-                <v-chip :color="getColor(item.status)">
-                    {{ item.status }}
-                </v-chip>
+                <v-progress-circular v-if="item.status == 'in_progress' || item.status == 'queued'"
+                    indeterminate
+                    color="primary">
+                </v-progress-circular>
+                <v-icon v-if="item.status == 'success'"
+                    large
+                    color="green darken-2">mdi-checkbox-marked-circle
+                </v-icon>
+                <v-icon v-if="item.status == 'failure'"
+                    large
+                    color="red darken-2">mdi-alert-circle-outline
+                </v-icon>
             </template>
+
+            <template v-slot:item.createdAt="{ item }">
+                    {{ format_date(item.createdAt) }}
+            </template>
+
+            <template v-slot:item.run_duration_ms="{ item }">
+                    {{ msToTime(item.run_duration_ms) }}
+            </template>
+
             <template v-slot:item.actions="{ item }">
                 <v-icon small @click="refreshRun(item)"> mdi-refresh </v-icon>
             </template>
@@ -41,6 +59,7 @@
 
 <script>
 import axios from "axios";
+import moment from 'moment';
 import findIndex from "lodash-es/findIndex";
 
 export default {
@@ -82,6 +101,22 @@ export default {
         },
     },
     methods: {
+        format_date(value){
+            if (value) {
+            return moment(String(value)).format('YYYY-MM-DD hh:mm')
+            }
+        },
+        msToTime(duration) {
+            var seconds = Math.floor((duration / 1000) % 60),
+                minutes = Math.floor((duration / (1000 * 60)) % 60),
+                hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+            hours = (hours < 10) ? "0" + hours : hours;
+            minutes = (minutes < 10) ? "0" + minutes : minutes;
+            seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+            return hours + ":" + minutes + ":" + seconds;
+        },
         getData() {
             this.loading = true;
             axios
@@ -109,22 +144,6 @@ export default {
         },
         filterOnlyCapsText(value, search) {
             return value != null && search != null && typeof value === "string" && value.toString().indexOf(search) !== -1;
-        },
-        getColor(status) {
-            switch (status) {
-                case "success":
-                    return "green";
-
-                case "failure":
-                    return "red";
-
-                case "in_progress":
-                case "queued":
-                    return "yellow";
-
-                default:
-                    return "transparent";
-            }
         },
     },
 };
