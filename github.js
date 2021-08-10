@@ -79,6 +79,20 @@ GitHub.listWorkflowsForRepo = async function listWorkflowsForRepo(repoName, repo
     }
 };
 
+GitHub.getUsage = async function getUsage(repoOwner, repoName, workflowId, run_id) {
+    try {
+        let usage = await octokit.actions.getWorkflowRunUsage({
+            repo: repoName,
+            owner: repoOwner,
+            workflow_id: workflowId,
+            run_id: run_id
+        });
+        return usage;
+    } catch (e) {
+        console.error('Error getting usage', e);
+        return {};
+    }
+};
 
 GitHub.getMostRecentRuns = async function getMostRecentRuns(repoOwner, repoName, workflowId) {
     try {
@@ -86,10 +100,11 @@ GitHub.getMostRecentRuns = async function getMostRecentRuns(repoOwner, repoName,
         const runs = await octokit.paginate(octokit.actions.listWorkflowRuns, { repo: repoName, owner: repoOwner, workflow_id: workflowId });
         if (runs.length > 0) {
             const groupedRuns = _.groupBy(runs, 'head_branch')
-            const rows = _.reduce(groupedRuns, (result, runs, branch) => {
+            const rows = _.reduce(groupedRuns, async (result, runs, branch) => {
                 debug(`branch`, branch);
                 if (sevenDaysAgo.isBefore(dayjs(runs[0].created_at))) {
                     debug(`adding run.id: ${runs[0].id}`);
+                    let usage = await GitHub.getUsage(repoOwner, repoName, workflowId, runs[0].id);
                     result.push({
                         runId: runs[0].id,
                         repo: runs[0].repository.name,
@@ -102,6 +117,8 @@ GitHub.getMostRecentRuns = async function getMostRecentRuns(repoOwner, repoName,
                         message: runs[0].head_commit.message,
                         committer: runs[0].head_commit.committer.name,
                         status: runs[0].status === 'completed' ? runs[0].conclusion : runs[0].status,
+                        billable: usage.data.billable,
+                        run_duration_ms: usage.data.run_duration_ms,
                         createdAt: runs[0].created_at,
                         updatedAt: runs[0].updated_at
                     });

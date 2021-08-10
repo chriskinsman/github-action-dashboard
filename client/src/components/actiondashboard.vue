@@ -76,6 +76,7 @@ export default {
                 { text: "Message", value: "message" },
                 { text: "Committer", value: "committer" },
                 { text: "Started", value: "createdAt" },
+                { text: "Duration", value: "run_duration_ms" },
                 { text: "", value: "actions", sortable: false },
             ];
         },
