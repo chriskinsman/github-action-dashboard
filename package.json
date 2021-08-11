@@ -7,7 +7,7 @@
     "start": "node index.js",
     "serve": "./node_modules/nodemon/bin/nodemon.js index.js --ignore 'client/*.js'  --exec 'npm run lint && node'",
     "lint": "./node_modules/.bin/eslint '**/*.js' --ignore-pattern 'client/dist/' ",
-    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "npm ci && npm ci --prefix client && npm run build --prefix client"
   },
   "keywords": [],
   "author": "",
