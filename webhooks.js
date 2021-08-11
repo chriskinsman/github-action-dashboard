@@ -11,8 +11,9 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
     const { GITHUB_APP_WEBHOOK_PORT = 8081 } = process.env;
     debug(`Setting up webhooks port: ${GITHUB_APP_WEBHOOK_PORT}`);
 
-    webhooks.on('workflow_run', ({ id, name, payload }) => {
+    webhooks.on('workflow_run', async ({ id, name, payload }) => {
         debug(`workflow_run received id: ${id}, name: ${name}`, payload);
+        let usage = await github.getUsage(payload.workflow_run.repository.owner.login, payload.workflow_run.repository.name, payload.workflow_run.workflow_id, payload.workflow_run.id);
         github.mergeRuns([{
             runId: payload.workflow_run.id,
             repo: payload.workflow_run.repository.name,
@@ -25,6 +26,8 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
             message: payload.workflow_run.head_commit.message,
             committer: payload.workflow_run.head_commit.committer.name,
             status: payload.workflow_run.status === 'completed' ? payload.workflow_run.conclusion : payload.workflow_run.status,
+            billable: usage.data.billable,
+            run_duration_ms: usage.data.run_duration_ms,
             createdAt: payload.workflow_run.created_at,
             updatedAt: payload.workflow_run.updated_at
         }]);
