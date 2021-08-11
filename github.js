@@ -105,23 +105,27 @@ GitHub.getMostRecentRuns = async function getMostRecentRuns(repoOwner, repoName,
                 if (sevenDaysAgo.isBefore(dayjs(runs[0].created_at))) {
                     debug(`adding run.id: ${runs[0].id}`);
                     let usage = await GitHub.getUsage(repoOwner, repoName, workflowId, runs[0].id);
-                    result.push({
-                        runId: runs[0].id,
-                        repo: runs[0].repository.name,
-                        owner: repoOwner,
-                        workflowId: workflowId,
-                        runNumber: runs[0].run_number,
-                        workflow: runs[0].name,
-                        branch: runs[0].head_branch,
-                        sha: runs[0].head_sha,
-                        message: runs[0].head_commit.message,
-                        committer: runs[0].head_commit.committer.name,
-                        status: runs[0].status === 'completed' ? runs[0].conclusion : runs[0].status,
-                        billable: usage.data.billable,
-                        run_duration_ms: usage.data.run_duration_ms,
-                        createdAt: runs[0].created_at,
-                        updatedAt: runs[0].updated_at
-                    });
+                    if (typeof result.push === "function") { 
+                        result.push({
+                            runId: runs[0].id,
+                            repo: runs[0].repository.name,
+                            owner: repoOwner,
+                            workflowId: workflowId,
+                            runNumber: runs[0].run_number,
+                            workflow: runs[0].name,
+                            branch: runs[0].head_branch,
+                            sha: runs[0].head_sha,
+                            message: runs[0].head_commit.message,
+                            committer: runs[0].head_commit.committer.name,
+                            status: runs[0].status === 'completed' ? runs[0].conclusion : runs[0].status,
+                            billable: usage.data.billable,
+                            run_duration_ms: usage.data.run_duration_ms,
+                            createdAt: runs[0].created_at,
+                            updatedAt: runs[0].updated_at
+                        });
+                    } else {
+                        console.error(`Error pushing ${runs[0].id}`);
+                    };
                 }
                 else {
                     debug(`skipping run.id: ${runs[0].id} created_at: ${runs[0].created_at}`);
