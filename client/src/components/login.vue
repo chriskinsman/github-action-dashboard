@@ -38,32 +38,32 @@
 </template>
 
 <script>
-    import router from "../router"    
-    import axios from "axios"    
-    export default {    
-        name: "Login",    
-        methods: {    
+    import router from "../router"
+    import axios from "axios"
+    export default {
+        name: "Login",
+        methods: {
             login: (e) => {
                 console.log(e)
-                e.preventDefault()    
-                let email = "user@email.com"   
-                let password = "password"    
-                let login = () => {    
-                    let data = {    
-                        email: email,    
-                        password: password    
-                    }    
-                    axios.post("/api/login", data)    
-                        .then((response) => {    
-                            console.log("Logged in"+response)    
-                            router.push("/")    
-                        })    
-                        .catch((errors) => {    
-                            console.log("Cannot log in"+errors)    
-                        })    
-                }    
-                login()    
-            }    
-        }    
+                e.preventDefault()
+                let email = "user@email.com"
+                let password = "password"
+                let login = () => {
+                    let data = {
+                        email: email,
+                        password: password
+                    }
+                    axios.post("/api/login", data)
+                        .then((response) => {
+                            console.log("Logged in"+response)
+                            router.push("/")
+                        })
+                        .catch((errors) => {
+                            console.log("Cannot log in"+errors)
+                        })
+                }
+                login()
+            }
+        }
     }
 </script>
