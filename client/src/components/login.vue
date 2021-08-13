@@ -10,11 +10,7 @@
         class="ma-10"
         >
         <v-card-text>
-        <form v-on:submit="login">    
-            <input type="text" name="email" /><br>    
-            <input type="password" name="password" /><br>    
-            <input type="submit" value="Login" />
-
+        <form v-on:submit="login">
             <v-text-field
                 label="email"
                 name="email"
@@ -31,7 +27,7 @@
                 color="primary"
                 type="submit"
             >Login</v-btn>
-        </form>  
+        </form>
         </v-card-text>
         </v-card>
     </v-row>
