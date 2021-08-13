@@ -5,13 +5,12 @@
         </v-app-bar>
 
         <v-main>
-            <ActionDashboard />
+            <router-view></router-view>
         </v-main>
     </v-app>
 </template>
 
 <script>
-import ActionDashboard from "./components/actiondashboard.vue";
 import axios from "axios";
 
 export default {
@@ -26,9 +25,6 @@ export default {
             .catch((err) => {
                 console.error(err);
             });
-    },
-    components: {
-        ActionDashboard,
     },
     data: () => ({
         owner: "PlaceholderTitleForOwner",
