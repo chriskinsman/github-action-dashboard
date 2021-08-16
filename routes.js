@@ -6,15 +6,23 @@ const passport = require('passport')
 
 
 const authMiddleware = (req, res, next) => {
-    if (!req.isAuthenticated()) {
-        res.status(401).send('You are not authenticated')
+    if (process.env.DASHBOARD_USERS) {
+        if (!req.isAuthenticated()) {
+            res.status(401).send('You are not authenticated')
+        } else {
+            return next()
+        }
     } else {
+        // skip middleware if no users defined
         return next()
     }
 }
 
 router.get('/owner', authMiddleware, function (req, res, next) {
     const owner = process.env.GITHUB_ORG || process.env.GITHUB_USERNAME;
+    if (process.env.DASHBOARD_USERS) {
+        res.statusCode = 210;
+    }
     debug(`/owner ${owner}`);
     res.send(owner);
 });

@@ -3,7 +3,6 @@ const runStatus = require('./runstatus');
 
 const cookieSession = require('cookie-session')
 
-const passport = require('./auth')
 
 // Handle when server is started from vue-cli vs root
 if (path.basename(process.cwd()) === 'client') {
@@ -12,6 +11,7 @@ if (path.basename(process.cwd()) === 'client') {
 else {
     require('dotenv').config()
 }
+const passport = require('./auth')
 const debug = require('debug')('action-dashboard:configure');
 //debug(`environment`, process.env);
 
@@ -26,9 +26,10 @@ module.exports = {
             maxAge: 24 * 60 * 60 * 1000 // 24 hours
         }))
         app.use(bodyParser.json());
-        app.use(passport.initialize());
-        app.use(passport.session());
-        //app.use('/api', passport.authenticate('local'), routes);
+        if (process.env.DASHBOARD_USERS) {
+          app.use(passport.initialize());
+          app.use(passport.session());
+        }
         app.use('/api', routes);
         
         if (process.env.GITHUB_APP_WEBHOOK_SECRET) {

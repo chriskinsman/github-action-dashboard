@@ -3,7 +3,7 @@
         <v-app-bar app color="primary" dark>
             <v-app-bar-title>{{ owner }} Action Dashboard</v-app-bar-title>
             <v-spacer></v-spacer>
-            <v-icon @click="logout" v-if="owner != 'login to'" color="white">mdi-logout</v-icon>
+            <v-icon @click="logout" v-if="logoutButton" color="white">mdi-logout</v-icon>
         </v-app-bar>
 
         <v-main>
@@ -43,6 +43,9 @@ export default {
                 .then((result) => {
                     console.log("Setting owner to " + result.data);
                     this.owner = result.data;
+                    if (result.status === 210) {
+                        this.logoutButton = true;
+                    }
                 })
                 .catch((err) => {
                     console.error(err);
@@ -51,6 +54,7 @@ export default {
     },
     data: () => ({
         owner: "login to",
+        logoutButton: false
     }),
 };
 </script>
