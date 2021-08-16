@@ -46,10 +46,12 @@ router.post('/login', function (req, res, next) {
         }
     
         if (!user) {
+            console.log("login error")
             return res.status(400).send([user, "Cannot log in", info]);
         }
     
         req.login(user, err => {
+            console.log("logged in")
             res.send("Logged in");
         });
     })(req, res, next);

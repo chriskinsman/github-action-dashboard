@@ -10,7 +10,15 @@
         class="ma-10"
         >
         <v-card-text>
-        <form v-on:submit="login">
+        <v-alert
+            v-show="error"
+            outlined
+            type="warning"
+            prominent
+            border="left"
+            >Wrong username or password!
+        </v-alert>
+        <form v-on:submit="greet">
             <v-text-field
                 label="username"
                 name="username"
@@ -38,9 +46,11 @@
     import axios from "axios"
     export default {
         name: "Login",
+        data: () => ({
+                error: false
+        }),
         methods: {
-            login: (e) => {
-                console.log(e)
+            greet: function (e) {
                 e.preventDefault()
                 let username = e.target.elements.username.value
                 let password = e.target.elements.password.value
@@ -55,6 +65,7 @@
                             router.push("/")
                         })
                         .catch((errors) => {
+                            this.error = true;
                             console.log("Cannot log in"+errors)
                         })
                 }
