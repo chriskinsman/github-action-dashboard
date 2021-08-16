@@ -2,6 +2,8 @@
     <v-app>
         <v-app-bar app color="primary" dark>
             <v-app-bar-title>{{ owner }} Action Dashboard</v-app-bar-title>
+            <v-spacer></v-spacer>
+            <v-icon @click="logout" v-if="owner != 'login to'" color="white">mdi-logout</v-icon>
         </v-app-bar>
 
         <v-main>
@@ -16,18 +18,39 @@ import axios from "axios";
 export default {
     name: "App",
     mounted() {
-        axios
-            .get("/api/owner")
-            .then((result) => {
-                console.log("Setting owner to " + result.data);
-                this.owner = result.data;
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+        this.getOwner();
+    },
+    updated() {
+        this.getOwner();
+    },
+    methods: {
+        logout: () => {
+            let logout = () => {
+                axios.get("/api/logout")
+                    .then((response) => {
+                        console.log("Logged out"+response)
+                        window.location.reload()
+                    })
+                    .catch((errors) => {
+                        console.log("Cannot logout "+errors)
+                    })
+            }
+            logout()
+        },
+        getOwner() {
+            axios
+                .get("/api/owner")
+                .then((result) => {
+                    console.log("Setting owner to " + result.data);
+                    this.owner = result.data;
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
     },
     data: () => ({
-        owner: "PlaceholderTitleForOwner",
+        owner: "login to",
     }),
 };
 </script>

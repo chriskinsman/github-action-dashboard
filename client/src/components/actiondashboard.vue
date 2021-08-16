@@ -92,6 +92,11 @@ export default {
                 .catch((err) => {
                     console.log("getData error");
                     console.error(err);
+                    if (err.response && err.response.status == 401) {
+                        this.$router.push({
+                            path: '/login',
+                        });
+                    }
                 })
                 .finally(() => {
                     console.log("getData finally");
