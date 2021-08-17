@@ -43,6 +43,7 @@ export default {
                 .then((result) => {
                     console.log("Setting owner to " + result.data);
                     this.owner = result.data;
+                    // Statuscode 210 is a regular 200 code but authenticated (required by logout button)
                     if (result.status === 210) {
                         this.logoutButton = true;
                     }

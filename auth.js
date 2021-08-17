@@ -5,23 +5,6 @@ const LocalStrategy = require('passport-local').Strategy
 const debug = require('debug')('action-dashboard:auth');
 
 if (process.env.DASHBOARD_USERS) {
-    /* Example users to base64 encode 
-    [
-    {
-        "id": 1,
-        "username": "admin",
-        "password": "password"
-    },
-    {
-        "id": 2,
-        "username": "asdf",
-        "password": "asdf"
-    }
-    ]
-
-    Example string: WwogIHsKICAgICJpZCI6IDEsCiAgICAidXNlcm5hbWUiOiAiYWRtaW4iLAogICAgInBhc3N3b3JkIjogInBhc3N3b3JkIgogIH0sCiAgewogICAgImlkIjogMiwKICAgICJ1c2VybmFtZSI6ICJhc2RmIiwKICAgICJwYXNzd29yZCI6ICJhc2RmIgogIH0KXQo=
-    */
-
     let users = [];
     try {
         const b = Buffer.from(process.env.DASHBOARD_USERS, 'base64').toString('ascii')
@@ -49,12 +32,6 @@ if (process.env.DASHBOARD_USERS) {
             done(null, false, { message: 'Incorrect username or password'})
             }
         }
-        /*  //DEBUGGING ONLY 
-        (username, password, done) => {
-            console.log(username, password)
-            return done(null, { id: 1, username: "admin", password: "password" })
-        }
-        */
         )
     )
     passport.serializeUser((user, done) => {

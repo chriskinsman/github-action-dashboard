@@ -18,7 +18,7 @@
             border="left"
             >Wrong username or password!
         </v-alert>
-        <form v-on:submit="greet">
+        <form v-on:submit="login">
             <v-text-field
                 label="username"
                 name="username"
@@ -50,7 +50,7 @@
                 error: false
         }),
         methods: {
-            greet: function (e) {
+            login: function (e) {
                 e.preventDefault()
                 let username = e.target.elements.username.value
                 let password = e.target.elements.password.value

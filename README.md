@@ -67,6 +67,36 @@ The dashboard has all of it's parameters passed via environment variables.
 * GITHUB_APP_INSTALLATIONID - Installation id that can be retrieved using steps in the next section.
 * GITHUB_APP_WEBHOOK_SECRET - Optional.  If you don't supply the dashboard will not setup webhooks and only update every 15 minutes.
 * DEBUG=action-dashboard:* - Optional setting to help in debugging
+* DASHBOARD_USERS Optional. Base64 encoded json users object. Enables authentication if not empty
+* DASHBOARD_SESSION_KEY Optional. A random string for the session
+
+### Authentication
+Authentication is enabled by setting the DASHBOARD_USERS env variable. 
+
+The DASHBOARD_USERS variable expects a base64 encoded json object in this format: 
+```
+[
+    {
+        "id": 1,
+        "username": "admin",
+        "password": "password"
+    },
+    {
+        "id": 2,
+        "username": "example",
+        "password": "example"
+    }
+]
+```
+
+Example string for testing only: 
+
+```
+WwogIHsKICAgICJpZCI6IDEsCiAgICAidXNlcm5hbWUiOiAiYWRtaW4iLAogICAgInBhc3N3b3JkIjogInBhc3N3b3JkIgogIH0sCiAgewogICAgImlkIjogMiwKICAgICJ1c2VybmFtZSI6ICJhc2RmIiwKICAgICJwYXNzd29yZCI6ICJhc2RmIgogIH0KXQo=
+```
+
+Setting the DASHBOARD_SESSION_KEY to private random string is highly recommended.
+
 
 ### Installation Id
 
