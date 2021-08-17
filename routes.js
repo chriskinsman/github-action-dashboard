@@ -66,7 +66,7 @@ router.get('/logout', function (req, res, next) {
 
 // Get the current user
 router.get('/user', function (req, res, next) {
-    res.send(req.user);
+    res.send({'id': req.user['id'], 'username': req.user['username']});
 });
 
 module.exports = router;
