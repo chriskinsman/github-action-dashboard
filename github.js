@@ -166,7 +166,7 @@ GitHub.refreshWorkflow = async function refreshWorkflow(repoOwner, repoName, wor
 GitHub.mergeRuns = function mergeRuns(runs) {
     // Merge into cache
     runs.forEach((run) => {
-        console.dir(run);
+        debug(`merging run`, run);
         const index = _.findIndex(_runs, { workflowId: run.workflowId, branch: run.branch });
         if (index >= 0) {
             _runs[index] = run;
