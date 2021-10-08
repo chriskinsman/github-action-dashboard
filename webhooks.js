@@ -16,9 +16,11 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
         let usage = null;
 
         if (payload.workflow_run.status === 'completed') {
+            debug(`getting usage for id: ${id}, name: ${name}`);
             usage = await github.getUsage(payload.workflow_run.owner.login, payload.workflow_run.repository.name, payload.workflow_run.workflow_id, payload.workflow_run.id);
         }
 
+        debug(`merging runs for id: ${id}, name: ${name}`);
         github.mergeRuns([{
             runId: payload.workflow_run.id,
             repo: payload.workflow_run.repository.name,
@@ -35,6 +37,7 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
             updatedAt: payload.workflow_run.updated_at,
             durationMs: usage?.data?.run_duration_ms,
         }]);
+        debug(`runs merged for id: ${id}, name: ${name}`);
     });
 
     if (!process.env.DOCKER_BUILD) {
