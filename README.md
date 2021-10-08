@@ -133,7 +133,7 @@ Couple tips:
 2. Use the smee-client to proxy the webhook:
 
 ```bash
-smee --port 8081 --path "/webhooks"
+smee --port 8081
 ```
 
 Then take the proxy endpoint and update your GitHub App webhook with it
