@@ -32,6 +32,18 @@
                     {{ item.status }}
                 </v-chip>
             </template>
+
+            <template v-slot:item.createdAt="{ item }">
+                <div>
+                    <div>{{ item.createdAt | formattedDate }}</div>
+                    <div>{{item.createdAt | formattedTime}}</div>
+                </div>
+            </template>
+
+            <template v-slot:item.durationMs="{ item }">
+                {{ item.durationMs | formattedDuration }}
+            </template>
+
             <template v-slot:item.actions="{ item }">
                 <v-icon small @click="refreshRun(item)"> mdi-refresh </v-icon>
             </template>
@@ -42,6 +54,9 @@
 <script>
 import axios from "axios";
 import findIndex from "lodash-es/findIndex";
+import * as dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+dayjs.extend(duration);
 
 export default {
     sockets: {
@@ -75,10 +90,40 @@ export default {
                 { text: "Commit", value: "sha" },
                 { text: "Message", value: "message" },
                 { text: "Committer", value: "committer" },
-                { text: "Started", value: "createdAt" },
+                { text: "Started", value: "createdAt", align: "right"},
+                { text: "Duration", value: "durationMs", align: "right"},
                 { text: "", value: "actions", sortable: false },
             ];
         },
+    },
+    filters: {
+        formattedDate(val) {
+            if(val) {
+                return dayjs(val).format("YYYY-MM-DD");
+            }
+            else return val;
+        },
+        formattedTime(val) {
+            if(val) {
+                return dayjs(val).format("h:mm A")
+            }
+        },
+        formattedDuration(val) {
+            if(val) {
+                let format = "";
+                if(val >= 3.6e+6) {
+                    format = "H[h] m[m] s[s]";
+                }
+                else if(val >= 60000 ) {
+                    format = "m[m] s[s]";
+                }
+                else {
+                    format = "s[s]";
+                }
+                return dayjs.duration(val).format(format);
+            }
+            else return val;
+        }
     },
     methods: {
         getData() {
@@ -130,7 +175,13 @@ export default {
 </script>
 
 <style lang="scss">
-.v-data-table-header th {
-    white-space: nowrap;
+.v-data-table-header { 
+    th {
+        white-space: nowrap;
+    }
+
+    th:nth-child(8) {
+        min-width: 120px;
+    }
 }
 </style>
