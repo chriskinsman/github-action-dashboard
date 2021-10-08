@@ -18,7 +18,7 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
 
             if (payload.workflow_run.status === 'completed') {
                 debug(`getting usage for id: ${id}, name: ${name}`);
-                usage = await github.getUsage(payload.workflow_run.owner.login, payload.workflow_run.repository.name, payload.workflow_run.workflow_id, payload.workflow_run.id);
+                usage = await github.getUsage(payload.workflow_run.repository.owner.login, payload.workflow_run.repository.name, payload.workflow_run.workflow_id, payload.workflow_run.id);
             }
 
             debug(`merging runs for id: ${id}, name: ${name}`);
