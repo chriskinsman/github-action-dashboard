@@ -5,8 +5,10 @@ const { Octokit } = require("@octokit/rest");
 const debug = require('debug')('action-dashboard:github');
 const _ = require('lodash');
 const dayjs = require('dayjs');
+const pLimit = require('p-limit');
 
 const runStatus = require('./runstatus');
+const { toLower } = require("lodash");
 
 const MyOctoKit = Octokit
     .plugin(throttling)
@@ -79,6 +81,20 @@ GitHub.listWorkflowsForRepo = async function listWorkflowsForRepo(repoName, repo
     }
 };
 
+GitHub.getUsage = async function getUsage(repoOwner, repoName, workflowId, run_id) {
+    try {
+        const usage = await octokit.actions.getWorkflowRunUsage({
+            repo: repoName,
+            owner: repoOwner,
+            workflow_id: workflowId,
+            run_id: run_id
+        });
+        return usage;
+    } catch (e) {
+        console.error('Error getting usage', e);
+        return null;
+    }
+};
 
 GitHub.getMostRecentRuns = async function getMostRecentRuns(repoOwner, repoName, workflowId) {
     try {
@@ -113,7 +129,24 @@ GitHub.getMostRecentRuns = async function getMostRecentRuns(repoOwner, repoName,
                 return result;
             }, []);
 
-            debug(`most recent runs owner: ${repoOwner}, repo: ${repoName}, workflowId: ${workflowId}`, rows);
+            debug(`getting duration of runs owner: ${repoOwner}, repo: ${repoName}, workflowId: ${workflowId}`);
+
+            // Get durations of runs
+            const limit = pLimit(10);
+            const getUsagePromises = rows.map(row => {
+                return limit(async () => {
+                    const usage = await GitHub.getUsage(repoOwner, repoName, workflowId, row.runId);
+                    if (usage?.data?.run_duration_ms) {
+                        row.durationMs = usage.data.run_duration_ms;
+                    }
+
+                    return row;
+                })
+            })
+
+            const rowsWithDuration = await Promise.all(getUsagePromises);
+
+            debug(`most recent runs owner: ${repoOwner}, repo: ${repoName}, workflowId: ${workflowId}`, rowsWithDuration);
             return rows;
         }
         else {
@@ -133,7 +166,7 @@ GitHub.refreshWorkflow = async function refreshWorkflow(repoOwner, repoName, wor
 GitHub.mergeRuns = function mergeRuns(runs) {
     // Merge into cache
     runs.forEach((run) => {
-        console.dir(run);
+        debug(`merging run`, run);
         const index = _.findIndex(_runs, { workflowId: run.workflowId, branch: run.branch });
         if (index >= 0) {
             _runs[index] = run;
