@@ -49,8 +49,9 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
         }
     });
 
-    if (!process.env.DOCKER_BUILD && process.env.GITHUB_APP_WEBHOOK_PORT) {
+    const middleware = createNodeMiddleware(webhooks, { path: "/" });
 
+    if (!process.env.DOCKER_BUILD) {
         require("http").createServer((req, res) => {
             debug(`received request path: ${req.url}`);
             if (req.url === '/ping') {
@@ -59,14 +60,12 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
                 res.end();
             }
             else {
-                webhooks.middleware(req, res);
+                middleware(req, res);
             }
         }).listen({ port: GITHUB_APP_WEBHOOK_PORT }, () => {
             console.log(`Listening for webhooks on ${GITHUB_APP_WEBHOOK_PORT}`);
         });
     }
-
-    const middleware = createNodeMiddleware(webhooks, { path: "/webhook" });
 
     module.exports = middleware;
 }
