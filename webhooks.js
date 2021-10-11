@@ -8,6 +8,8 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
         secret: process.env.GITHUB_APP_WEBHOOK_SECRET,
     });
 
+    const { GITHUB_APP_WEBHOOK_PORT = 8081 } = process.env;
+    debug(`Setting up webhooks port: ${GITHUB_APP_WEBHOOK_PORT}`);
 
     webhooks.on('workflow_run', async ({ id, name, payload }) => {
         try {
@@ -44,8 +46,6 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
     });
 
     if (!process.env.DOCKER_BUILD && process.env.GITHUB_APP_WEBHOOK_PORT) {
-        const { GITHUB_APP_WEBHOOK_PORT = 8081 } = process.env;
-        debug(`Setting up webhooks port: ${GITHUB_APP_WEBHOOK_PORT}`);
 
         require("http").createServer((req, res) => {
             debug(`received request path: ${req.url}`);
