@@ -69,6 +69,9 @@ The dashboard has all of it's parameters passed via environment variables.
 - GITHUB_APP_CLIENTSECRET - The client secret from the GitHub App general settings page.
 - GITHUB_APP_INSTALLATIONID - Installation id that can be retrieved using steps in the next section.
 - GITHUB_APP_WEBHOOK_SECRET - Optional. If you don't supply the dashboard will not setup webhooks and only update every 15 minutes.
+- DOCKER_BUILD - Optional. If set to true the dashboard will disable the wehbook port.
+- GITHUB_APP_WEBHOOK_PORT - Optional. By default the dashboard will listen on port 8081 for webhooks.
+- GITHUB_APP_WEBHOOK_PATH - Optional. If set dashboard will listen for webhooks on this path.
 - DEBUG=action-dashboard:\* - Optional setting to help in debugging
 
 ### Installation Id

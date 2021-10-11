@@ -20,9 +20,9 @@ module.exports = {
         app.use(bodyParser.json());
         app.use('/api', routes);
 
-        if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
-            debug(`Setting up webhooks path: /webhook`);
-            app.use('/webhook', middleware);
+        if (process.env.GITHUB_APP_WEBHOOK_SECRET && process.env.GITHUB_APP_WEBHOOK_PATH) {
+            console.log(`Listening for webhooks on path: ${process.env.GITHUB_APP_WEBHOOK_PATH}`);
+            app.use(process.env.GITHUB_APP_WEBHOOK_PATH, middleware);
         }
     },
     after: (app, server) => {
