@@ -11,6 +11,10 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
     const { GITHUB_APP_WEBHOOK_PORT = 8081 } = process.env;
     debug(`Setting up webhooks port: ${GITHUB_APP_WEBHOOK_PORT}`);
 
+    webhooks.onError((error) => {
+        console.log(`Webhook error occured in "${error.event.name} handler: ${error.stack}"`)
+    })
+
     webhooks.on('workflow_run', async ({ id, name, payload }) => {
         try {
             debug(`workflow_run received id: ${id}, name: ${name}`, payload);
