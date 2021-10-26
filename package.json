@@ -1,6 +1,6 @@
 {
   "name": "github-action-dashboard",
-  "version": "1.1.1",
+  "version": "1.4.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,21 +12,22 @@
   "license": "MIT",
   "dependencies": {
     "@octokit/auth-app": "^2.11.0",
-    "@octokit/plugin-retry": "^3.0.7",
-    "@octokit/plugin-throttling": "^3.4.1",
-    "@octokit/rest": "^18.1.0",
+    "@octokit/plugin-retry": "^3.0.9",
+    "@octokit/plugin-throttling": "^3.5.2",
+    "@octokit/rest": "^18.12.0",
     "@octokit/webhooks": "^8.3.0",
     "body-parser": "^1.19.0",
     "connect-history-api-fallback": "^1.6.0",
-    "dayjs": "^1.10.4",
-    "debug": "^4.3.1",
+    "dayjs": "^1.10.7",
+    "debug": "^4.3.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
+    "p-limit": "^3.1.0",
     "socket.io": "^3.1.1"
   },
   "devDependencies": {
-    "eslint": "^7.2.0",
-    "nodemon": "^2.0.4"
+    "eslint": "^7.32.0",
+    "nodemon": "^2.0.13"
   }
 }
