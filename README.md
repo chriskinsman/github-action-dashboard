@@ -67,6 +67,7 @@ The dashboard has all of it's parameters passed via environment variables.
 - GITHUB_APP_CLIENTSECRET - The client secret from the GitHub App general settings page.
 - GITHUB_APP_INSTALLATIONID - Installation id that can be retrieved using steps in the next section.
 - GITHUB_APP_WEBHOOK_SECRET - Optional. If you don't supply the dashboard will not setup webhooks and only update every 15 minutes.
+- LOOKBACK_DAYS - Optional, defaults to 7. Number of days to look in the past for workflow runs.
 - DEBUG=action-dashboard:\* - Optional setting to help in debugging
 
 ### Installation Id
