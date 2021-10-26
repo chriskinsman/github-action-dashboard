@@ -14,9 +14,9 @@ A self hosted solution seemed like the way to go but I couldn't really find any.
 
 ## How it works
 
-* Upon startup all repositories for the organization/username are iterated. 
+* Upon startup all repositories for the organization/username are iterated.
 * Each repository is checked for workflows.
-* Each workflow has it's runs listed 
+* Each workflow has it's runs listed.
 * The most recent run for each branch is returned.
 
 Every 15 minutes this process is repeated.  Fifteen minutes was chosen so as to not hit GitHub API limits.
@@ -41,9 +41,9 @@ Steps:
         * Action: read-only
     * Subscribe to events:
         * Workflow run
-    * Where can this GibHub App be installed: Only on this account    
+    * Where can this GibHub App be installed: Only on this account
     * Should look like: ![General Settings Screen](https://github.com/ChrisKinsman/github-action-dashboard/blob/main/docs/images/ActionDashboardNewGitHubApp.png)
-    * Click Create GitHub App 
+    * Click Create GitHub App
 * You should now be on the general settings page for the app
 * Click Generate a new client secret and save off the client secret as it will disappear after you navigate off the page.
 * Click Generate a private key.  It will download a .pem file that you need to base64 encode.
@@ -61,11 +61,12 @@ The dashboard has all of it's parameters passed via environment variables.
 
 * GITHUB_USERNAME or GITHUB_ORG - Only one is valid.  If both are specified GITHUB_ORG takes precedence and the GITHUB_USERNAME is ignored.
 * GITHUB_APPID - The AppId from the GitHub App general settings page.
-* GITHUB_APP_PRIVATEKEY - The base64 encoded private key from the GitHub App general settings page. 
+* GITHUB_APP_PRIVATEKEY - The base64 encoded private key from the GitHub App general settings page.
 * GITHUB_APP_CLIENTID - The client id from the GitHub App general settings page.
 * GITHUB_APP_CLIENTSECRET - The client secret from the GitHub App general settings page.
 * GITHUB_APP_INSTALLATIONID - Installation id that can be retrieved using steps in the next section.
 * GITHUB_APP_WEBHOOK_SECRET - Optional.  If you don't supply the dashboard will not setup webhooks and only update every 15 minutes.
+* LOOKBACK_DAYS - Optional, defaults to 7. Number of days to look in the past for workflow runs.
 * DEBUG=action-dashboard:* - Optional setting to help in debugging
 
 ### Installation Id

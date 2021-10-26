@@ -20,6 +20,7 @@ const _privateKey = Buffer.from(process.env.GITHUB_APP_PRIVATEKEY || "", "base64
 const _clientId = process.env.GITHUB_APP_CLIENTID;
 const _clientSecret = process.env.GITHUB_APP_CLIENTSECRET;
 const _installationId = process.env.GITHUB_APP_INSTALLATIONID;
+const _lookbackDays = process.env.LOOKBACK_DAYS || 7
 
 // Cache all workflows to speed up refresh
 let _runs = [];
@@ -82,13 +83,13 @@ GitHub.listWorkflowsForRepo = async function listWorkflowsForRepo(repoName, repo
 
 GitHub.getMostRecentRuns = async function getMostRecentRuns(repoOwner, repoName, workflowId) {
     try {
-        const sevenDaysAgo = dayjs().subtract(7, 'day');
+        const daysAgo = dayjs().subtract(_lookbackDays, 'day');
         const runs = await octokit.paginate(octokit.actions.listWorkflowRuns, { repo: repoName, owner: repoOwner, workflow_id: workflowId });
         if (runs.length > 0) {
             const groupedRuns = _.groupBy(runs, 'head_branch')
             const rows = _.reduce(groupedRuns, (result, runs, branch) => {
                 debug(`branch`, branch);
-                if (sevenDaysAgo.isBefore(dayjs(runs[0].created_at))) {
+                if (daysAgo.isBefore(dayjs(runs[0].created_at))) {
                     debug(`adding run.id: ${runs[0].id}`);
                     result.push({
                         runId: runs[0].id,
