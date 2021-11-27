@@ -1,4 +1,4 @@
-FROM node:14-alpine as base
+FROM node:16-alpine as base
 LABEL org.opencontainers.image.source=https://github.com/ChrisKinsman/github-action-dashboard
 WORKDIR /github-action-dashboard
 
