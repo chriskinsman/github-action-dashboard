@@ -10,6 +10,9 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "comments": {
+    "p-limit": "Stuck on 3.1.0 until we move to ESM"
+  },
   "dependencies": {
     "@octokit/auth-app": "^3.6.1",
     "@octokit/plugin-retry": "^3.0.9",
@@ -20,14 +23,14 @@
     "connect-history-api-fallback": "^1.6.0",
     "dayjs": "^1.10.7",
     "debug": "^4.3.3",
-    "dotenv": "^8.6.0",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "lodash": "^4.17.21",
     "p-limit": "^3.1.0",
-    "socket.io": "^3.1.2"
+    "socket.io": "^4.4.0"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
+    "eslint": "^8.3.0",
     "nodemon": "^2.0.15"
   }
 }
