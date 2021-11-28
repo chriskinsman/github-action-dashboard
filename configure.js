@@ -30,4 +30,6 @@ module.exports = {
 };
 
 // Loads webhook support if GITHUB_APP_WEBHOOK_SECRET defined
-const webhooks = require("./webhooks");
+if (!process.env.DOCKER_BUILD) {
+  const webhooks = require("./webhooks");
+}
