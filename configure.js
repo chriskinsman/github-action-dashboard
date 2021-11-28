@@ -8,20 +8,21 @@ if (path.basename(process.cwd()) === "client") {
   require("dotenv").config();
 }
 const debug = require("debug")("action-dashboard:configure");
-//debug(`environment`, process.env);
 
 const bodyParser = require("body-parser");
 const routes = require("./routes");
 
 module.exports = {
   before: (app) => {
-    if (process.env.DOCKER_BUILD !== "TRUE") {
+    if (!process.env.DOCKER_BUILD) {
+      debug("configure before");
       app.use(bodyParser.json());
       app.use("/api", routes);
     }
   },
   after: (app, server) => {
-    if (process.env.DOCKER_BUILD !== "TRUE") {
+    if (!process.env.DOCKER_BUILD) {
+      debug("configure after");
       // Attach socket.io to server
       runStatus.init(server);
     }
