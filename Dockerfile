@@ -21,7 +21,7 @@ RUN cd /github-action-dashboard/ && \
     npm ci && \
     cd /github-action-dashboard/client && \
     npm ci && \
-    DOCKER_BUILD=true npm run build
+    DEBUG=action-dashboard:* DOCKER_BUILD=true npm run build
 
 # production stage & clean up
 FROM base as release
