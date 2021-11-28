@@ -1,5 +1,4 @@
 const path = require("path");
-const runStatus = require("./runstatus");
 
 // Handle when server is started from vue-cli vs root
 if (path.basename(process.cwd()) === "client") {
@@ -9,12 +8,12 @@ if (path.basename(process.cwd()) === "client") {
 }
 const debug = require("debug")("action-dashboard:configure");
 
-const bodyParser = require("body-parser");
-const routes = require("./routes");
-
 module.exports = {
   before: (app) => {
     if (!process.env.DOCKER_BUILD) {
+      const bodyParser = require("body-parser");
+      const routes = require("./routes");
+
       debug("configure before");
       app.use(bodyParser.json());
       app.use("/api", routes);
@@ -23,6 +22,8 @@ module.exports = {
   after: (app, server) => {
     if (!process.env.DOCKER_BUILD) {
       debug("configure after");
+      const runStatus = require("./runstatus");
+
       // Attach socket.io to server
       runStatus.init(server);
     }
