@@ -10,7 +10,7 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
   const { GITHUB_APP_WEBHOOK_PORT = 8081 } = process.env;
   debug(`Setting up webhooks port: ${GITHUB_APP_WEBHOOK_PORT}`);
 
-  const middleware = createNodeMiddleware(webhooks);
+  const middleware = createNodeMiddleware(webhooks, { path: "/" });
 
   webhooks.on("workflow_run", async ({ id, name, payload }) => {
     try {

@@ -4,7 +4,7 @@ WORKDIR /github-action-dashboard
 
 # ---- Dependencies
 FROM base as dependencies
-RUN apk add --no-cache --virtual .gyp python make g++ git openssh
+RUN apk add --no-cache --virtual .gyp python3 make g++ git openssh
 
 #
 # ---- npm ci production
