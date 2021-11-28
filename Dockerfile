@@ -1,10 +1,10 @@
-FROM node:14-alpine as base
+FROM node:16-alpine as base
 LABEL org.opencontainers.image.source=https://github.com/ChrisKinsman/github-action-dashboard
 WORKDIR /github-action-dashboard
 
 # ---- Dependencies
 FROM base as dependencies
-RUN apk add --no-cache --virtual .gyp python make g++ git openssh
+RUN apk add --no-cache --virtual .gyp python3 make g++ git openssh
 
 #
 # ---- npm ci production
@@ -21,7 +21,7 @@ RUN cd /github-action-dashboard/ && \
     npm ci && \
     cd /github-action-dashboard/client && \
     npm ci && \
-    DOCKER_BUILD=true npm run build
+    DEBUG=action-dashboard:* DOCKER_BUILD=true npm run build
 
 # production stage & clean up
 FROM base as release
