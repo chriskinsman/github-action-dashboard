@@ -1,25 +1,55 @@
 const debug = require("debug")("action-dashboard:webhooks");
-if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
-  const { Webhooks, createNodeMiddleware } = require("@octokit/webhooks");
-  const github = require("./github");
+const { Webhooks, createNodeMiddleware } = require("@octokit/webhooks");
 
-  const webhooks = new Webhooks({
-    secret: process.env.GITHUB_APP_WEBHOOK_SECRET,
-  });
+class WebHooks {
+  constructor(secret, port, gitHub, actions) {
+    if (secret) {
+      this._secret = secret;
+      this._port = port || 8081;
+      this._gitHub = gitHub;
+      this._actions = actions;
+      this._enabled = true;
+    }
+  }
 
-  const { GITHUB_APP_WEBHOOK_PORT = 8081 } = process.env;
-  debug(`Setting up webhooks port: ${GITHUB_APP_WEBHOOK_PORT}`);
+  start() {
+    if (this._enabled) {
+      debug(`Setting up webhooks port: ${this._port}`);
+      // OctoKit webhooks, not this module
+      const webhooks = new Webhooks({
+        secret: this._secret,
+      });
 
-  const middleware = createNodeMiddleware(webhooks, { path: "/" });
+      const middleware = createNodeMiddleware(webhooks, { path: "/" });
+      webhooks.on("workflow_run", this.workflowRun);
 
-  webhooks.on("workflow_run", async ({ id, name, payload }) => {
+      require("http")
+        .createServer((req, res) => {
+          debug(`received request path: ${req.url}`);
+          if (req.url === "/ping") {
+            debug("ping");
+            res.statusCode = 200;
+            res.end();
+          } else {
+            middleware(req, res);
+          }
+        })
+        .listen({ port: this._port }, () => {
+          console.log(`Listening for webhooks on ${this._port}`);
+        });
+    } else {
+      debug("Webhooks disabled");
+    }
+  }
+
+  async workflowRun({ id, name, payload }) {
     try {
       debug(`workflow_run received id: ${id}, name: ${name}`, payload);
       let usage = null;
 
       if (payload.workflow_run.status === "completed") {
         debug(`getting usage for id: ${id}, name: ${name}`);
-        usage = await github.getUsage(
+        usage = await this._gitHub.getUsage(
           payload.workflow_run.repository.owner.login,
           payload.workflow_run.repository.name,
           payload.workflow_run.workflow_id,
@@ -28,7 +58,7 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
       }
 
       debug(`merging runs for id: ${id}, name: ${name}`);
-      github.mergeRuns([
+      this._actions.mergeRuns([
         {
           runId: payload.workflow_run.id,
           repo: payload.workflow_run.repository.name,
@@ -46,7 +76,7 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
               : payload.workflow_run.status,
           createdAt: payload.workflow_run.created_at,
           updatedAt: payload.workflow_run.updated_at,
-          durationMs: usage?.data?.run_duration_ms,
+          durationMs: usage?.run_duration_ms,
         },
       ]);
       debug(`runs merged for id: ${id}, name: ${name}`);
@@ -56,22 +86,7 @@ if (process.env.GITHUB_APP_WEBHOOK_SECRET) {
         payload
       );
     }
-  });
-
-  if (!process.env.DOCKER_BUILD) {
-    require("http")
-      .createServer((req, res) => {
-        debug(`received request path: ${req.url}`);
-        if (req.url === "/ping") {
-          debug("ping");
-          res.statusCode = 200;
-          res.end();
-        } else {
-          middleware(req, res);
-        }
-      })
-      .listen({ port: GITHUB_APP_WEBHOOK_PORT }, () => {
-        console.log(`Listening for webhooks on ${GITHUB_APP_WEBHOOK_PORT}`);
-      });
   }
 }
+
+module.exports = WebHooks;

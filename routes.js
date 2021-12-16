@@ -1,22 +1,31 @@
-const express = require('express');
-const router = express.Router();
-const debug = require('debug')('action-dashboard:routes');
-const gitHub = require('./github');
+const debug = require("debug")("action-dashboard:routes");
 
-router.get('/owner', function (req, res, next) {
-    const owner = process.env.GITHUB_ORG || process.env.GITHUB_USERNAME;
-    debug(`/owner ${owner}`);
-    res.send(owner);
-});
+class Routes {
+  constructor(actions, owner) {
+    this._owner = owner;
+    this._actions = actions;
+  }
 
-router.get('/initialData', function (req, res, next) {
-    const initialData = gitHub.getInitialData();
-    res.send(initialData);
-});
+  attach(router) {
+    router.get("/owner", (req, res, next) => {
+      debug(`/owner ${this._owner}`);
+      res.send(this._owner);
+    });
 
-router.get('/runs/:owner/:repo/:workflow_id', function (req, res, next) {
-    gitHub.refreshWorkflow(req.params.owner, req.params.repo, parseInt(req.params.workflow_id));
-    res.send();
-});
+    router.get("/initialData", (req, res, next) => {
+      const initialData = this._actions.getInitialData();
+      res.send(initialData);
+    });
 
-module.exports = router;
+    router.get("/runs/:owner/:repo/:workflow_id", (req, res, next) => {
+      this._actions.refreshWorkflow(
+        req.params.owner,
+        req.params.repo,
+        parseInt(req.params.workflow_id)
+      );
+      res.send();
+    });
+  }
+}
+
+module.exports = Routes;
