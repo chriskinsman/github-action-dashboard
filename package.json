@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "DEBUG=action-dashboard,-not_this jest --silent",
+    "test:integration": "DEBUG=action-dashboard,-not_this jest ./tests/integration --silent",
+    "test": "DEBUG=action-dashboard,-not_this jest ./tests/unit --silent",
     "serve": "./node_modules/nodemon/bin/nodemon.js index.js --ignore 'client/*.js'  --exec 'npm run lint && node'",
     "lint": "./node_modules/.bin/eslint '**/*.js' --ignore-pattern 'client/dist/' "
   },
