@@ -7,6 +7,15 @@ FROM base as dependencies
 RUN apk add --no-cache --virtual .gyp python3 make g++ git openssh
 
 #
+#
+# ---- Tests
+FROM dependencies as tests
+COPY package.json package-lock.json /github-action-dashboard/
+RUN cd /github-action-dashboard && \
+    npm ci && \
+    npm run test
+
+#
 # ---- npm ci production
 FROM dependencies as npm
 COPY package.json package-lock.json /github-action-dashboard/
