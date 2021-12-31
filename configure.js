@@ -19,6 +19,7 @@ else {
 }
 
 const {
+  PORT = 8080,
   LOOKBACK_DAYS = 7,
   GITHUB_APPID,
   GITHUB_APP_CLIENTID,
@@ -26,6 +27,7 @@ const {
   GITHUB_APP_INSTALLATIONID,
   GITHUB_APP_WEBHOOK_PORT = 8081,
   GITHUB_APP_WEBHOOK_SECRET,
+  GITHUB_APP_WEBHOOK_PATH = "/",
   GITHUB_ORG,
   GITHUB_USERNAME,
 } = process.env;
@@ -66,10 +68,13 @@ module.exports = {
     app.use("/api", router);
 
     const webhooks = new WebHooks(
+      PORT,
       GITHUB_APP_WEBHOOK_SECRET,
       GITHUB_APP_WEBHOOK_PORT,
+      GITHUB_APP_WEBHOOK_PATH,
       gitHub,
-      actions
+      actions,
+      app
     );
 
     // Start everything

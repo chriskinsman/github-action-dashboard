@@ -60,6 +60,7 @@ The dashboard has all of it's parameters passed via environment variables.
 
 ### Variables
 
+- PORT - Optional, defaults to 8080. Port site should run on.
 - GITHUB_USERNAME or GITHUB_ORG - Only one is valid. If both are specified GITHUB_ORG takes precedence and the GITHUB_USERNAME is ignored.
 - GITHUB_APPID - The AppId from the GitHub App general settings page.
 - GITHUB_APP_PRIVATEKEY - The base64 encoded private key from the GitHub App general settings page.
@@ -67,6 +68,8 @@ The dashboard has all of it's parameters passed via environment variables.
 - GITHUB_APP_CLIENTSECRET - The client secret from the GitHub App general settings page.
 - GITHUB_APP_INSTALLATIONID - Installation id that can be retrieved using steps in the next section.
 - GITHUB_APP_WEBHOOK_SECRET - Optional. If you don't supply the dashboard will not setup webhooks and only update every 15 minutes.
+- GITHUB_APP_WEBHOOK_PORT - Optional, defaults to 8081. If set to the same as PORT must also specify GITHUB_APP_WEBHOOK_PATH
+- GITHUB_APP_WEBHOOK_PATH - Optional if WebHooks running on different port than main site, defaults to /, if running on the same port defaults to /webhook.
 - LOOKBACK_DAYS - Optional, defaults to 7. Number of days to look in the past for workflow runs.
 - DEBUG=action-dashboard:\* - Optional setting to help in debugging
 
