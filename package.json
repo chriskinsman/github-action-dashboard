@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test:integration": "DEBUG=action-dashboard,-not_this jest ./tests/integration --silent",
+    "test": "DEBUG=action-dashboard,-not_this jest ./tests/unit --silent",
     "serve": "./node_modules/nodemon/bin/nodemon.js index.js --ignore 'client/*.js'  --exec 'npm run lint && node'",
     "lint": "./node_modules/.bin/eslint '**/*.js' --ignore-pattern 'client/dist/' "
   },
@@ -25,12 +27,14 @@
     "debug": "^4.3.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "jest": "^27.4.5",
     "lodash": "^4.17.21",
     "p-limit": "^3.1.0",
     "socket.io": "^4.4.0"
   },
   "devDependencies": {
     "eslint": "^8.3.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "sinon": "^12.0.1"
   }
 }
