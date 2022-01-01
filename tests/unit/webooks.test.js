@@ -110,7 +110,7 @@ describe(`WebHooks - HTTP Tests`, () => {
   });
 });
 
-test(`WebHooks - workflowRun`, async () => {
+test(`WebHooks - workflowRun Completed No Usage`, async () => {
   jest.mock("../../github");
   const GitHub = require("../../github");
   const getUsage = jest.fn(async () => {
@@ -148,5 +148,91 @@ test(`WebHooks - workflowRun`, async () => {
   await webHooks.workflowRun(mockData.webHooks[0]);
 
   expect(getUsage.mock.calls.length).toBe(1);
+  expect(mergeRuns.mock.calls.length).toBe(1);
+});
+
+test(`WebHooks - workflowRun Completed Usage`, async () => {
+  const durationMs = 1234;
+  jest.mock("../../github");
+  const GitHub = require("../../github");
+  const getUsage = jest.fn(async () => {
+    return { run_duration_ms: durationMs };
+  });
+
+  GitHub.mockImplementation(() => {
+    return {
+      getUsage,
+    };
+  });
+
+  jest.mock("../../actions");
+  const Actions = require("../../actions");
+  const mergeRuns = jest.fn(() => {});
+
+  Actions.mockImplementation(() => {
+    return {
+      mergeRuns,
+    };
+  });
+
+  const gitHub = new GitHub();
+  const actions = new Actions(gitHub);
+  webHooks = new WebHooks(
+    8080,
+    "XXXX",
+    8080,
+    "/webhook",
+    gitHub,
+    actions,
+    null
+  );
+
+  await webHooks.workflowRun(mockData.webHooks[0]);
+
+  expect(getUsage.mock.calls.length).toBe(1);
+  expect(mergeRuns.mock.calls.length).toBe(1);
+  expect(mergeRuns.mock.calls[0][0][0].durationMs).toBe(durationMs);
+});
+
+test(`WebHooks - workflowRun Pending`, async () => {
+  jest.mock("../../github");
+  const GitHub = require("../../github");
+  const getUsage = jest.fn(async () => {
+    return null;
+  });
+
+  GitHub.mockImplementation(() => {
+    return {
+      getUsage,
+    };
+  });
+
+  jest.mock("../../actions");
+  const Actions = require("../../actions");
+  const mergeRuns = jest.fn(() => {});
+
+  Actions.mockImplementation(() => {
+    return {
+      mergeRuns,
+    };
+  });
+
+  const gitHub = new GitHub();
+  const actions = new Actions(gitHub);
+  webHooks = new WebHooks(
+    8080,
+    "XXXX",
+    8080,
+    "/webhook",
+    gitHub,
+    actions,
+    null
+  );
+
+  const pending = { ...mockData.webHooks[0] };
+  pending.payload.workflow_run.status = "pending";
+  await webHooks.workflowRun(pending);
+
+  expect(getUsage.mock.calls.length).toBe(0);
   expect(mergeRuns.mock.calls.length).toBe(1);
 });
