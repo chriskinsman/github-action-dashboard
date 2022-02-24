@@ -17,13 +17,13 @@ jobs:
           node-version-file: ".nvmrc"
       - name: Install packages for server
         run: npm ci --ignore-scripts
+      - name: Install Packages for client
+        run: npm ci --ignore-scripts
+        working-directory: ./client
       - name: Run tests
         run: npm run test
       - name: Eliminate devDependencies
         run: npm prune --production
-      - name: Install Packages for client
-        run: npm ci --ignore-scripts
-        working-directory: ./client
       - name: Build web client
         run: DOCKER_BUILD=true npm run build
         working-directory: ./client
