@@ -96,7 +96,7 @@ test("Actions - getMostRecentRuns With Data", async () => {
   const gitHub = new GitHub();
 
   // Long lookback for our test data
-  const actions = new Actions(gitHub, null, 60);
+  const actions = new Actions(gitHub, null, 600);
   const runs = await actions.getMostRecentRuns(
     "ChrisKinsman",
     "github-action-dashboard",
