@@ -1,14 +1,32 @@
 name: ci
 on:
+  workflow_dispatch:
   push:
-  pull_request:
-    branches: main
+  # pull_request:
+  #   branches: main
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+          node-version-file: ".nvmrc"
+      - name: Install packages for server
+        run: npm ci --ignore-scripts
+      - name: Run tests
+        run: npm run test
+      - name: Eliminate devDependencies
+        run: npm prune --production
+      - name: Install Packages for client
+        run: npm ci --ignore-scripts
+        working-directory: ./client
+      - name: Build web client
+        run: DOCKER_BUILD=true npm run build
+        working-directory: ./client
       - name: Docker meta
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
