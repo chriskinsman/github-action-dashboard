@@ -10,13 +10,17 @@ const WebHooks = require("./webhooks");
 
 const baseDir = path.basename(process.cwd());
 // Handle when server is started from vue-cli vs root
-if (baseDir) {
+if (baseDir === "client") {
+  debug("started from vue-cli");
   require("dotenv").config({ path: path.resolve(process.cwd(), "../.env") });
 }
 // Handle when server is started from
 else {
+  debug("started from index.js");
   require("dotenv").config();
 }
+
+debug("env", process.env);
 
 const {
   PORT = 8080,
