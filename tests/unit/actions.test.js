@@ -7,10 +7,6 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
-test("Actions - Init", () => {
-  expect(new Actions()).toEqual(new Actions());
-});
-
 test("Actions - Start", () => {
   jest.useFakeTimers();
   const gitHub = require("../../github");
