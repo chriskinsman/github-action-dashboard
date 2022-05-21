@@ -8,14 +8,14 @@
     "lint": "DOCKER_BUILD=true vue-cli-service lint"
   },
   "dependencies": {
-    "axios": "^0.24.0",
-    "core-js": "^3.19.1",
-    "dayjs": "^1.10.7",
+    "axios": "^0.27.2",
+    "core-js": "^3.22.5",
+    "dayjs": "^1.11.2",
     "lodash-es": "^4.17.21",
-    "socket.io-client": "^4.4.0",
+    "socket.io-client": "^4.5.1",
     "vue": "^2.6.14",
     "vue-socket.io-extended": "^4.2.0",
-    "vuetify": "^2.6.0"
+    "vuetify": "^2.6.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.15",
@@ -26,7 +26,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "sass": "^1.32.13",
     "sass-loader": "^10.0.0",
-    "vue-cli-plugin-vuetify": "~2.4.4",
+    "vue-cli-plugin-vuetify": "~2.4.8",
     "vue-template-compiler": "^2.6.14",
     "vuetify-loader": "^1.7.3"
   },
