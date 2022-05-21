@@ -93,7 +93,7 @@ class WebHooks {
     }
   }
 
-  async workflowRun({ id, name, payload }) {
+  workflowRun = async ({ id, name, payload }) => {
     try {
       debug(`workflow_run received id: ${id}, name: ${name}`, payload);
       let usage = null;
@@ -132,12 +132,13 @@ class WebHooks {
       ]);
       debug(`runs merged for id: ${id}, name: ${name}`);
     } catch (e) {
+      console.dir(e);
       console.error(
         `Error processing workflow_run received id: ${id}, name: ${name}`,
         payload
       );
     }
-  }
+  };
 }
 
 module.exports = WebHooks;

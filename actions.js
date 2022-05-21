@@ -125,7 +125,7 @@ class Actions {
     debug("merged runs", this._runs);
   }
 
-  async refreshRuns() {
+  refreshRuns = async () => {
     // Prevent re-entrant calls
     if (this._refreshingRuns) {
       return;
@@ -160,7 +160,7 @@ class Actions {
       debug("Finished refreshing runs");
       this._refreshingRuns = false;
     }
-  }
+  };
 
   async refreshWorkflow(repoOwner, repoName, workflowId) {
     const runs = await this.getMostRecentRuns(repoOwner, repoName, workflowId);
