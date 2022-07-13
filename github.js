@@ -32,6 +32,7 @@ class GitHub {
         installationId: _installationId,
       },
       authStrategy: createAppAuth,
+      baseUrl: "https://github.jmg.one/api/v3",
       throttle: {
         onRateLimit: (retryAfter, options) => {
           console.error(
