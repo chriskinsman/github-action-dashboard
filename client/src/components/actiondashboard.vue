@@ -18,13 +18,13 @@
                 <v-text-field v-model="search" label="Search" class="mx-4"></v-text-field>
             </template>
             <template v-slot:item.workflow="{ item }">
-                <a :href="`https://github.jmg.one/${item.owner}/${item.repo}/actions?query=workflow%3A${item.workflow}`" target="_blank">{{ item.workflow }}</a>
+                <a :href="`https://${item.host}/${item.owner}/${item.repo}/actions?query=workflow%3A${item.workflow}`" target="_blank">{{ item.workflow }}</a>
             </template>
             <template v-slot:item.message="{ item }">
-                <a :href="`https://github.jmg.one/${item.owner}/${item.repo}/actions/runs/${item.runId}`" target="_blank">{{ item.message }}</a>
+                <a :href="`https://${item.host}/${item.owner}/${item.repo}/actions/runs/${item.runId}`" target="_blank">{{ item.message }}</a>
             </template>
             <template v-slot:item.sha="{ item }">
-                <a :href="`https://github.jmg.one/${item.owner}/${item.repo}/commit/${item.sha}`" target="_blank">{{ item.sha.substr(0, 8) }}</a>
+                <a :href="`https://${item.host}/${item.owner}/${item.repo}/commit/${item.sha}`" target="_blank">{{ item.sha.substr(0, 8) }}</a>
             </template>
 
             <template v-slot:item.status="{ item }">

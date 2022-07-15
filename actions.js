@@ -56,6 +56,7 @@ class Actions {
                     : runs[0].status,
                 createdAt: runs[0].created_at,
                 updatedAt: runs[0].updated_at,
+                host: this._gitHub._gheHost ? this._gitHub._gheHost : "github.com",
               });
             } else {
               debug(
