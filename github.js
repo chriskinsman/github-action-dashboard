@@ -89,6 +89,9 @@ class GitHub {
 
   async getUsage(repoOwner, repoName, workflowId, run_id) {
     try {
+      if (this._gheHost)
+        return null;
+
       const usage = await this._octokit.actions.getWorkflowRunUsage({
         repo: repoName,
         owner: repoOwner,
