@@ -1,6 +1,6 @@
 require('dotenv').config()
-const { createAppAuth } = require("@octokit/auth-app");
-const { Octokit } = require("@octokit/rest");
+import { createAppAuth } from "@octokit/auth-app";
+import { Octokit } from "@octokit/rest";
 
 const _appId = process.env.GITHUB_APPID;
 // Handles newlines \n in private key

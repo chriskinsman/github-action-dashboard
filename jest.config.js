@@ -4,8 +4,6 @@
  */
 
 require("dotenv").config();
-
-module.exports = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -32,9 +30,9 @@ module.exports = {
   //   "/node_modules/"
   // ],
 
-  // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: "v8",
-
+  // Indicates which provider should be used to instrument code for 
+export const coverageProvider = "v8";
+  
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
   //   "json",
@@ -193,4 +191,3 @@ module.exports = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-};

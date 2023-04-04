@@ -1,9 +1,9 @@
-const WebHooks = require("../../webhooks");
+import WebHooks from "../../webhooks";
 
-const axios = require("axios").default;
-const { Webhooks: OctoWebhooks } = require("@octokit/webhooks");
+import axios from "axios";
+import { Webhooks as OctoWebhooks } from "@octokit/webhooks";
 
-const mockData = require("./mock_data");
+import { webHooks as _webHooks } from "./mock_data";
 
 test("WebHooks - Init Disabled", () => {
   const webHooks = new WebHooks(8080, null, 8081, "/", null, null, null);
@@ -91,15 +91,15 @@ describe(`WebHooks - HTTP Tests`, () => {
   });
 
   test(`Workflow_Run Message`, async () => {
-    const sig = await octoWebhooks.sign(mockData.webHooks[0].payload);
+    const sig = await octoWebhooks.sign(_webHooks[0].payload);
 
     const response = await axios.post(
       `http://localhost:${webHookPort}/`,
-      mockData.webHooks[0].payload,
+      _webHooks[0].payload,
       {
         headers: {
-          "X-GitHub-Event": mockData.webHooks[0].name,
-          "X-GitHub-Delivery": mockData.webHooks[0].id,
+          "X-GitHub-Event": _webHooks[0].name,
+          "X-GitHub-Delivery": _webHooks[0].id,
           "X-Hub-Signature-256": sig,
           "Content-Type": "application/json",
         },
@@ -145,7 +145,7 @@ test(`WebHooks - workflowRun Completed No Usage`, async () => {
     null
   );
 
-  await webHooks.workflowRun(mockData.webHooks[0]);
+  await webHooks.workflowRun(_webHooks[0]);
 
   expect(getUsage.mock.calls.length).toBe(1);
   expect(mergeRuns.mock.calls.length).toBe(1);
@@ -187,7 +187,7 @@ test(`WebHooks - workflowRun Completed Usage`, async () => {
     null
   );
 
-  await webHooks.workflowRun(mockData.webHooks[0]);
+  await webHooks.workflowRun(_webHooks[0]);
 
   expect(getUsage.mock.calls.length).toBe(1);
   expect(mergeRuns.mock.calls.length).toBe(1);
@@ -229,7 +229,7 @@ test(`WebHooks - workflowRun Pending`, async () => {
     null
   );
 
-  const pending = { ...mockData.webHooks[0] };
+  const pending = { ..._webHooks[0] };
   pending.payload.workflow_run.status = "pending";
   await webHooks.workflowRun(pending);
 

@@ -1,9 +1,8 @@
-const { createServer } = require("http");
-const { Server } = require("socket.io");
-const Client = require("../../client/node_modules/socket.io-client");
+import { createServer } from "http";
+import { Server } from "socket.io";
+import Client from "../../client/node_modules/socket.io-client";
 
-const RunStatus = require("../../runstatus");
-let httpServer;
+import RunStatus from "../../runstatus";
 let port;
 let io;
 let runStatus;

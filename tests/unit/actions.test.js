@@ -1,6 +1,6 @@
-const Actions = require("../../actions");
+import Actions from "../../actions";
 
-const mockData = require("./mock_data");
+import { runs as _runs, repos, workflows } from "./mock_data";
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -76,7 +76,7 @@ test("Actions - getMostRecentRuns With Data", async () => {
   jest.mock("../../github");
   const GitHub = require("../../github");
   const listWorkflowRuns = jest.fn(async () => {
-    const mockRuns = [...mockData.runs];
+    const mockRuns = [..._runs];
     return mockRuns;
   });
   const getUsage = jest.fn(async () => {
@@ -133,7 +133,7 @@ test("Actions - refreshWorkflow", async () => {
 });
 
 test("Actions - mergeRuns", () => {
-  const mockRuns = [...mockData.runs];
+  const mockRuns = [..._runs];
   const gitHub = require("../../github");
   const RunStatus = require("../../runstatus");
   const runStatus = new RunStatus();
@@ -154,13 +154,13 @@ test("Actions - refreshRuns", async () => {
   jest.mock("../../github");
   const GitHub = require("../../github");
   const listRepos = jest.fn(async () => {
-    return [...mockData.repos];
+    return [...repos];
   });
   const listWorkflowsForRepo = jest.fn(async () => {
-    return [...mockData.workflows];
+    return [...workflows];
   });
   const listWorkflowRuns = jest.fn(async () => {
-    return [...mockData.runs];
+    return [..._runs];
   });
 
   GitHub.mockImplementation(() => {
@@ -189,10 +189,10 @@ test("Actions - refreshRuns Error", async () => {
     throw new Error("foo");
   });
   const listWorkflowsForRepo = jest.fn(async () => {
-    return [...mockData.workflows];
+    return [...workflows];
   });
   const listWorkflowRuns = jest.fn(async () => {
-    return [...mockData.runs];
+    return [..._runs];
   });
 
   GitHub.mockImplementation(() => {
