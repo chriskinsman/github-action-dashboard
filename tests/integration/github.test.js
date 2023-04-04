@@ -1,4 +1,3 @@
-import { TestWatcher } from "jest";
 import GitHub from "../../github";
 
 // Requires environment variables to be set to run tests
