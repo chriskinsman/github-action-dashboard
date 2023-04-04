@@ -18,7 +18,7 @@
   "dependencies": {
     "@octokit/auth-app": "^3.6.1",
     "@octokit/plugin-retry": "^3.0.9",
-    "@octokit/plugin-throttling": "^3.6.2",
+    "@octokit/plugin-throttling": "^5.0.1",
     "@octokit/rest": "^19.0.7",
     "@octokit/webhooks": "^9.24.0",
     "@vue/runtime-dom": "^3.2.47",
