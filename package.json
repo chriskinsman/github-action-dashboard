@@ -35,6 +35,6 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "axios": "^0.27.2",
-    "eslint": "^8.16.0"
+    "eslint": "^8.37.0"
   }
 }
