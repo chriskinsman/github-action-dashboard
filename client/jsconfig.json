@@ -12,6 +12,9 @@
     "src/**/*.js"
   ],
    "vueCompilerOptions": {
-     "target": 3
+    "extensions": [
+      ".vue"
+    ],
+     "target": 2
    }
 }
