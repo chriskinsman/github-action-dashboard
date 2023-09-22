@@ -34,6 +34,7 @@ const {
   GITHUB_APP_WEBHOOK_PATH = "/",
   GITHUB_ORG,
   GITHUB_USERNAME,
+  GHE_HOST,
 } = process.env;
 
 // Handles newlines \n in private key
@@ -56,7 +57,8 @@ module.exports = {
       GITHUB_APP_PRIVATEKEY,
       GITHUB_APP_CLIENTID,
       GITHUB_APP_CLIENTSECRET,
-      GITHUB_APP_INSTALLATIONID
+      GITHUB_APP_INSTALLATIONID,
+      GHE_HOST
     );
     _runStatus = new RunStatus();
     const actions = new Actions(gitHub, _runStatus, LOOKBACK_DAYS);

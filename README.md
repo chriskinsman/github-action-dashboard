@@ -73,6 +73,7 @@ The dashboard has all of it's parameters passed via environment variables.
 - GITHUB_APP_WEBHOOK_PORT - Optional, defaults to 8081. If set to the same as PORT must also specify GITHUB_APP_WEBHOOK_PATH
 - GITHUB_APP_WEBHOOK_PATH - Optional if WebHooks running on different port than main site, defaults to /, if running on the same port defaults to /webhook.
 - LOOKBACK_DAYS - Optional, defaults to 7. Number of days to look in the past for workflow runs.
+- GHE_HOST - Optional, defaults to github.com. If you are using GitHub Enterprise.
 - DEBUG=action-dashboard:\* - Optional setting to help in debugging
 
 ### Installation Id

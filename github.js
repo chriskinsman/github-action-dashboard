@@ -12,8 +12,10 @@ class GitHub {
     _privateKey,
     _clientId,
     _clientSecret,
-    _installationId
+    _installationId,
+    _gheHost
   ) {
+    this._gheHost = _gheHost;
     this._org = _org;
     this._user = _user;
     this._appId = _appId;
@@ -32,6 +34,7 @@ class GitHub {
         installationId: _installationId,
       },
       authStrategy: createAppAuth,
+      baseUrl:  (this._gheHost) ? `https://${this._gheHost}/api/v3` : "https://api.github.com",
       throttle: {
         onRateLimit: (retryAfter, options) => {
           console.error(
@@ -86,6 +89,9 @@ class GitHub {
 
   async getUsage(repoOwner, repoName, workflowId, run_id) {
     try {
+      if (this._gheHost)
+        return null;
+
       const usage = await this._octokit.actions.getWorkflowRunUsage({
         repo: repoName,
         owner: repoOwner,
