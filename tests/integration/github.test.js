@@ -1,5 +1,4 @@
-const { TestWatcher } = require("jest");
-const GitHub = require("../../github");
+import GitHub from "../../github";
 
 // Requires environment variables to be set to run tests
 // In local environment this is set out of band via wallaby.conf.js

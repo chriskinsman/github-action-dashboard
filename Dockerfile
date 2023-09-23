@@ -1,4 +1,6 @@
-FROM node:16-alpine as base
+# Mac build
+FROM --platform=linux/amd64 node:16-alpine as base
+# original: FROM node:16-alpine as base
 LABEL org.opencontainers.image.source=https://github.com/ChrisKinsman/github-action-dashboard
 WORKDIR /github-action-dashboard
 
@@ -6,7 +8,6 @@ WORKDIR /github-action-dashboard
 FROM base as dependencies
 RUN apk add --no-cache --virtual .gyp python3 make g++ git openssh
 
-#
 # ---- npm ci production
 FROM dependencies as npm
 COPY package.json package-lock.json ./

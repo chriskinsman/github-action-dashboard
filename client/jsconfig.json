@@ -10,5 +10,11 @@
   "include": [
     "src/**/*.vue",
     "src/**/*.js"
-  ]
+  ],
+   "vueCompilerOptions": {
+    "extensions": [
+      ".vue"
+    ],
+     "target": 2
+   }
 }
